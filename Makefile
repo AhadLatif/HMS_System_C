@@ -1,19 +1,26 @@
-# Makefile at HMS_System_C/Makefile
+# Makefile for Hospital Management System
 
 CC     = gcc
-CFLAGS = -Iinclude -Wall -Wextra
-SRC    = src/main.c \
-         src/patient.c \
-         src/common.c \
-         src/doctor.c \
-         src/billing.c \
-         src/id_manager.c
+CFLAGS = -I. -Isrc -Isrc/patient -Isrc/doctor -Isrc/billing -Isrc/id_manager -Isrc/common -Wall -Wextra
+SRC    = main.c \
+         src/patient/patient.c \
+         src/doctor/doctor.c \
+         src/billing/billing.c \
+         src/id_manager/id_manager.c \
+         src/common/common.c
 OBJ    = $(SRC:.c=.o)
 TARGET = hms.exe
 
-.PHONY: all clean
+.PHONY: all clean run directories
 
-all: $(TARGET)
+all: directories $(TARGET)
+
+directories:
+	@mkdir -p patient doctor billing data
+	@type nul > data/patients.dat
+	@type nul > data/doctors.dat
+	@type nul > data/bills.dat
+	@type nul > data/meta.dat
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
@@ -21,5 +28,9 @@ $(TARGET): $(OBJ)
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+run: all
+	./$(TARGET)
+
 clean:
-	del /Q src\*.o $(TARGET) 2>nul || rm -f src/*.o $(TARGET)
+	-taskkill /F /IM hms.exe >nul 2>&1 || exit 0
+	-del /Q $(OBJ) $(TARGET) 2>nul || exit 0

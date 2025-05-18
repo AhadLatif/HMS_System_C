@@ -4,10 +4,10 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include "../Include/patient.h"
-#include "../Include/common.h"
-#include "../Include/doctor.h"
-#include "../Include/billing.h"
+#include "src/patient/patient.h"
+#include "src/common/common.h"
+#include "src/doctor/doctor.h"
+#include "src/billing/billing.h"
 
 void displayMenu(void)
 {

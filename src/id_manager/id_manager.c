@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
-#include "../include/common.h"
-#include "../include/id_manager.h"
+#include "common/common.h"
+#include "id_manager.h"
 
 IDManager id_manager;
 void initializeMetaFile()

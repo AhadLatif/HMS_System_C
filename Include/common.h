@@ -1,13 +1,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-void inputString(char *target, int size);
+#include <stdio.h>
 
-void exitProgram();
-int fileCheck(FILE *file);
 void displayMenu(void);
-void welcomScreen(void);
-void login();
-int inputInt(const char *prompt);
+int inputInt(const char* prompt);
+void exitProgram(void);
 
-#endif
+#endif // COMMON_H 

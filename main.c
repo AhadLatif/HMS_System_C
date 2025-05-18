@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <windows.h>
 #include <conio.h>
-#include "../Include/patient.h"
-#include "../Include/common.h"
-#include "../Include/doctor.h"
-#include "../Include/billing.h"
-#include "../Include/id_manager.h"
-
+#include "src/patient/patient.h"
+#include "src/common/common.h"
+#include "src/doctor/doctor.h"
+#include "src/billing/billing.h"
+#include "src/id_manager/id_manager.h"
 
 int main()
 {
