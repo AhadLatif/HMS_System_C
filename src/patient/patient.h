@@ -20,6 +20,7 @@ extern int patient_counter;
 // Functions
 
 // Core Functions
+void patientModule();
 void addPatient();
 void searchPatientById();
 void searchPatientByName();
