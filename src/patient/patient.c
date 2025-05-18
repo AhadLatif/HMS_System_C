@@ -30,8 +30,6 @@ void addPatient()
     char choice[10];
     do
     {
-        /* code */
-
         if (patient_counter > MAX_PATIENTS)
         {
             printf("List is full\n");
@@ -39,19 +37,15 @@ void addPatient()
         }
 
         Patient new_patient;
-
         new_patient.p_id = id_manager.next_patient_id;
 
         for (int i = 0; i < patient_counter; i++)
         {
-
             if (patients[i].p_id == new_patient.p_id)
             {
                 printf("ID %d already exists", new_patient.p_id);
             }
         }
-
-        getchar();
 
         printf("Enter name: ");
         inputString(new_patient.p_name, sizeof(new_patient.p_name));
@@ -71,15 +65,12 @@ void addPatient()
         savePatientsToFile();
         id_manager.next_patient_id++;
         saveIDManager();
-        printf("Patient Entered Successfully !\n");
+        printf("Patient Entered Successfully!\n");
 
-        printf("Do you want to add another patient : \n");
+        printf("Do you want to add another patient (Y/N)? ");
         inputString(choice, sizeof(choice));
 
-    } while (strcmp(choice, "N0") != 0 &&
-             strcmp(choice, "No") != 0 &&
-             strcmp(choice, "N") != 0 &&
-             strcmp(choice, "n") != 0);
+    } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "no") != 0);
 }
 
 // --------------------------------------------Display Patients
@@ -123,10 +114,9 @@ void savePatientsToFile()
 //  ---------------------------------------Search Functions
 void searchPatientById()
 {
-    while ((getchar()) != '\n')
-        ;
+    // while ((getchar()) != '\n');
     int id;
-    printf("Enter Id : \n");
+    printf("Enter Id : ");
     scanf("%d", &id);
 
     for (int i = 0; i < patient_counter; i++)
@@ -145,8 +135,7 @@ void searchPatientById()
 }
 void searchPatientByName()
 {
-    while ((getchar()) != '\n')
-        ;
+    // while ((getchar()) != '\n');
 
     char name[50];
     printf("Enter Name : ");
@@ -181,7 +170,7 @@ void deletePatient()
     id = inputInt("Enter ID:");
     // while ((getchar()) != '\n');
 
-        for (int i = 0; i < patient_counter; i++)
+    for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].p_id == id)
         {
