@@ -1,33 +1,33 @@
 #include <stdio.h>
 #include <windows.h>
 #include <conio.h>
-#include "../include/patient.h"
-#include "../include/common.h"
-#include "../include/doctor.h"
-#include "../include/billing.h"
-#include "../include/id_manager.h"
+#include "../Include/patient.h"
+#include "../Include/common.h"
+#include "../Include/doctor.h"
+#include "../Include/billing.h"
+#include "../Include/id_manager.h"
+
 
 int main()
 {
-
     loadPatientFromFile();
-
     loadIDManager();
 
-    // welcomScreen();
-    // login();
     int choice;
     do
     {
         displayMenu();
-
         choice = inputInt("Enter your choice: ");
 
-        if (choice == 1)
+        switch (choice)
+        {
+        case 1:
             addPatient();
-        else if (choice == 2)
+            break;
+        case 2:
             displayPatient();
-        else if (choice == 3)
+            break;
+        case 3:
         {
             int search_choice;
             printf("Search Patient by:\n1. ID\n2. Name\nEnter choice: ");
@@ -37,16 +37,19 @@ int main()
             else if (search_choice == 2)
                 searchPatientByName();
             else
-                printf("Error\n");
+                printf("Invalid search choice!\n");
         }
-        else if (choice == 4)
+        break;
+        case 4:
             deletePatient();
-        else
-        {
-            printf("You enter wrong choice ! \n");
+            break;
+        case 5:
             exitProgram();
+            return 0;
+        default:
+            printf("Invalid choice! Please enter a number between 1 and 5.\n");
         }
-    } while (choice >= 1 && choice <= 4);
+    } while (choice != 5);
 
     return 0;
 }

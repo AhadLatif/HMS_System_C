@@ -1,18 +1,25 @@
-# Makefile for HMS Project
+# Makefile at HMS_System_C/Makefile
 
-CC = gcc
+CC     = gcc
 CFLAGS = -Iinclude -Wall -Wextra
-SRC = src/main.c src/patient.c src/doctor.c src/billing.c src/common.c src/id_manager.c src/doctor.c src/billing.c 
-OBJ = $(SRC:.c=.o)
-TARGET = HMS
+SRC    = src/main.c \
+         src/patient.c \
+         src/common.c \
+         src/doctor.c \
+         src/billing.c \
+         src/id_manager.c
+OBJ    = $(SRC:.c=.o)
+TARGET = hms.exe
+
+.PHONY: all clean
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CC) $(OBJ) -o $(TARGET)
+	$(CC) $(CFLAGS) -o $@ $^
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	del /Q src\*.o *.exe 2> nul
+	del /Q src\*.o $(TARGET) 2>nul || rm -f src/*.o $(TARGET)

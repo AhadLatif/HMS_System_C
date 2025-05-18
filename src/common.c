@@ -4,20 +4,20 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include "patient.h"
-#include "common.h"
-#include "doctor.h"
-#include "billing.h"
+#include "../Include/patient.h"
+#include "../Include/common.h"
+#include "../Include/doctor.h"
+#include "../Include/billing.h"
 
 void displayMenu(void)
 {
-
-    printf("\n--- Patient Management System ---\n");
+    printf("\n=== Hospital Management System ===\n");
     printf("1. Add a Patient\n");
     printf("2. Display All Patients\n");
     printf("3. Search for a Patient\n");
     printf("4. Delete a Patient\n");
     printf("5. Exit\n");
+    printf("==============================\n");
 }
 
 void welcomScreen(void)
