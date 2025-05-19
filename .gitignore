@@ -1,1 +1,22 @@
-hms.exe
+# Build artifacts
+*.exe
+*.out
+*.o
+*.obj
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.cache
+
+# VS Code settings (optional)
+.vscode/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Ignore binary data files if not essential
+/data/*.dat
+!data/meta.dat   # keep meta.dat if you want to track it for ID management
