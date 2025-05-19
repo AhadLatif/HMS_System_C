@@ -10,16 +10,16 @@ Patient patients[MAX_PATIENTS];
 int patient_counter = 0;
 
 
+void patientModule()
+{
 
-void patientModule(){
-    
     loadPatientFromFile();
     loadIDManager();
 
     int choice;
     do
     {
-        displayMenu();
+        displayPatientMenu();
         choice = inputInt("Enter your choice: ");
 
         switch (choice)
@@ -59,21 +59,13 @@ void patientModule(){
 
     } while (choice != 5);
 }
-void loadPatientFromFile(void)
 
-{
 
-    FILE *fp = fopen("./data/patient.dat", "rb");
 
-    fileCheck(fp);
+                                            
+                                            // CORE FUNCTIONS
 
-    while (fread(&patients[patient_counter], sizeof(Patient), 1, fp) != 0)
-    {
-        patient_counter++;
-    }
 
-    fclose(fp);
-}
 
 // ------------  Add Patient ----------------
 void addPatient()
@@ -122,7 +114,103 @@ void addPatient()
         inputString(choice, sizeof(choice));
 
     } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "no") != 0);
+
+    
 }
+
+
+
+
+
+//  ---------------------------------------Search Functions
+void searchPatientById()
+{
+    // while ((getchar()) != '\n');
+    int id;
+    printf("Enter Id : ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (patients[i].p_id == id)
+        {
+            printf("-----------------------------------------------------------------------------------\n");
+            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
+            printf("-----------------------------------------------------------------------------------\n");
+
+            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
+            return;
+        }
+    }
+    printf("Patient with ID %d not found.\n", id);
+}
+
+
+
+void searchPatientByName()
+{
+    // while ((getchar()) != '\n');
+
+    char name[50];
+    printf("Enter Name : ");
+
+    inputString(name, sizeof(name));
+
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (strcasecmp(patients[i].p_name, name) == 0)
+        {
+
+            printf("-----------------------------------------------------------------------------------\n");
+            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
+            printf("-----------------------------------------------------------------------------------\n");
+
+            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
+
+            return;
+        }
+    }
+    printf("Patient with name : %s not found.\n", name);
+}
+
+//-----------------------------------Delete Patient--------------------
+
+void deletePatient()
+{
+
+    int id, index = -1;
+
+    // while ((getchar()) != '\n')
+    id = inputInt("Enter ID:");
+    // while ((getchar()) != '\n');
+
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (patients[i].p_id == id)
+        {
+            index = i;
+        }
+    }
+
+    if (index == -1)
+    {
+        printf("Patient with ID %d not found.\n", id);
+        return;
+    }
+
+    for (int j = index; j < patient_counter; j++)
+    {
+        patients[j] = patients[j + 1];
+    }
+
+    patient_counter--;
+    printf("Patient with ID %d  deleted successfully.\n", id);
+    savePatientsToFile();
+}
+
+
+
+                                        // SECONDARY FUNCTIONS
 
 // --------------------------------------------Display Patients
 void displayPatient()
@@ -162,85 +250,33 @@ void savePatientsToFile()
     fclose(file);
 }
 
-//  ---------------------------------------Search Functions
-void searchPatientById()
+
+// ----------------------------------------Display Menu Function
+void displayPatientMenu(void)
 {
-    // while ((getchar()) != '\n');
-    int id;
-    printf("Enter Id : ");
-    scanf("%d", &id);
-
-    for (int i = 0; i < patient_counter; i++)
-    {
-        if (patients[i].p_id == id)
-        {
-            printf("-----------------------------------------------------------------------------------\n");
-            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
-            printf("-----------------------------------------------------------------------------------\n");
-
-            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
-            return;
-        }
-    }
-    printf("Patient with ID %d not found.\n", id);
-}
-void searchPatientByName()
-{
-    // while ((getchar()) != '\n');
-
-    char name[50];
-    printf("Enter Name : ");
-
-    inputString(name, sizeof(name));
-
-    for (int i = 0; i < patient_counter; i++)
-    {
-        if (strcasecmp(patients[i].p_name, name) == 0)
-        {
-
-            printf("-----------------------------------------------------------------------------------\n");
-            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
-            printf("-----------------------------------------------------------------------------------\n");
-
-            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
-
-            return;
-        }
-    }
-    printf("Patient with name : %s not found.\n", name);
+    printf("\n=== Hospital Management System ===\n");
+    printf("1. Add a Patient\n");
+    printf("2. Display All Patients\n");
+    printf("3. Search for a Patient\n");
+    printf("4. Delete a Patient\n");
+    printf("5. Exit\n");
+    printf("==============================\n");
 }
 
-//-----------------------------------Delete
 
-void deletePatient()
+//---------------------------------------------Load Patient 
+void loadPatientFromFile(void)
+
 {
 
-    int id, index = -1;
+    FILE *fp = fopen("./data/patient.dat", "rb");
 
-    // while ((getchar()) != '\n')
-    id = inputInt("Enter ID:");
-    // while ((getchar()) != '\n');
+    fileCheck(fp);
 
-    for (int i = 0; i < patient_counter; i++)
+    while (fread(&patients[patient_counter], sizeof(Patient), 1, fp) != 0)
     {
-        if (patients[i].p_id == id)
-        {
-            index = i;
-        }
+        patient_counter++;
     }
 
-    if (index == -1)
-    {
-        printf("Patient with ID %d not found.\n", id);
-        return;
-    }
-
-    for (int j = index; j < patient_counter; j++)
-    {
-        patients[j] = patients[j + 1];
-    }
-
-    patient_counter--;
-    printf("Patient with ID %d  deleted successfully.\n", id);
-    savePatientsToFile();
+    fclose(fp);
 }

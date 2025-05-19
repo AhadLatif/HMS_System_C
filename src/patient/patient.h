@@ -29,7 +29,7 @@ void deletePatient();
 // Screen Functions
 
 void displayPatient();
-void displayMenu(void);
+void displayPatientMenu(void);
 
 // FileHandling Functions
 

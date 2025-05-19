@@ -9,16 +9,7 @@
 #include "src/doctor/doctor.h"
 #include "src/billing/billing.h"
 
-void displayMenu(void)
-{
-    printf("\n=== Hospital Management System ===\n");
-    printf("1. Add a Patient\n");
-    printf("2. Display All Patients\n");
-    printf("3. Search for a Patient\n");
-    printf("4. Delete a Patient\n");
-    printf("5. Exit\n");
-    printf("==============================\n");
-}
+
 
 void welcomScreen(void)
 {
