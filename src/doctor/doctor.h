@@ -9,9 +9,19 @@ typedef struct
 
 void addDoctor();
 void deleteDoctor();
-void searchDoctor();
+void searchDoctorById();
+void searchDoctorByName();
+void searchDoctorBySpecialization();
+void deleteDoctor();
 
+// File Handling 
+void saveDoctorToFile();
+void loadDoctorFromFile();
 
+//Others
+
+void displayDoctorMenu();
+void displayDoctor();
 
 
 #endif
