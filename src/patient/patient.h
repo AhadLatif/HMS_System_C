@@ -2,6 +2,15 @@
 #define PATIENT_H
 
 #define MAX_PATIENTS 100
+
+typedef enum{
+
+    ACTIVE,
+    DEACTIVE,
+    DISCHARGED,
+    UNDER_DYGNOSIS
+}PatientStatus;
+
 typedef struct
 {
     char p_name[50];
@@ -10,6 +19,8 @@ typedef struct
     char p_contact_num[15];
     char p_gender[10];
     char p_disease[50];
+    int assigned_d_id;
+    PatientStatus status;
     // int p_admission_d[20];
     // char p_status[20];
 } Patient;

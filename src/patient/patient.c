@@ -9,7 +9,6 @@
 Patient patients[MAX_PATIENTS];
 int patient_counter = 0;
 
-
 void patientModule()
 {
 
@@ -60,12 +59,7 @@ void patientModule()
     } while (choice != 5);
 }
 
-
-
-                                            
-                                            // CORE FUNCTIONS
-
-
+// CORE FUNCTIONS
 
 // ------------  Add Patient ----------------
 void addPatient()
@@ -103,7 +97,7 @@ void addPatient()
 
         printf("Enter contact number: ");
         inputString(new_patient.p_contact_num, sizeof(new_patient.p_contact_num));
-
+        new_patient.status = ACTIVE;
         patients[patient_counter++] = new_patient;
         savePatientsToFile();
         id_manager.next_patient_id++;
@@ -114,21 +108,14 @@ void addPatient()
         inputString(choice, sizeof(choice));
 
     } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "no") != 0);
-
-    
 }
-
-
-
-
 
 //  ---------------------------------------Search Functions
 void searchPatientById()
 {
     // while ((getchar()) != '\n');
     int id;
-    printf("Enter Id : ");
-    scanf("%d", &id);
+    id = inputInt("Enter age : ");
 
     for (int i = 0; i < patient_counter; i++)
     {
@@ -144,8 +131,6 @@ void searchPatientById()
     }
     printf("Patient with ID %d not found.\n", id);
 }
-
-
 
 void searchPatientByName()
 {
@@ -178,7 +163,7 @@ void searchPatientByName()
 void deletePatient()
 {
 
-    int id, index = -1;
+    int id;//, index = -1;
 
     // while ((getchar()) != '\n')
     id = inputInt("Enter ID:");
@@ -186,31 +171,32 @@ void deletePatient()
 
     for (int i = 0; i < patient_counter; i++)
     {
-        if (patients[i].p_id == id)
+        if (patients[i].p_id == id && patients[i].status == ACTIVE)
         {
-            index = i;
+            // index = i;
+            patients[i].status = DEACTIVE;
+            printf("Patient with ID %d  deleted successfully.\n", id);
+            savePatientsToFile();
         }
-    }
 
-    if (index == -1)
-    {
         printf("Patient with ID %d not found.\n", id);
-        return;
     }
 
-    for (int j = index; j < patient_counter; j++)
-    {
-        patients[j] = patients[j + 1];
-    }
+    // if (index == -1)
+    // {
+    //     printf("Patient with ID %d not found.\n", id);
+    //     return;
+    // }
 
-    patient_counter--;
-    printf("Patient with ID %d  deleted successfully.\n", id);
-    savePatientsToFile();
+    // for (int j = index; j < patient_counter; j++)
+    // {
+    //     patients[j] = patients[j + 1];
+    // }
+
+    // patient_counter--;
 }
 
-
-
-                                        // SECONDARY FUNCTIONS
+// SECONDARY FUNCTIONS
 
 // --------------------------------------------Display Patients
 void displayPatient()
@@ -226,7 +212,11 @@ void displayPatient()
     printf("-----------------------------------------------------------------------------------\n");
     for (int i = 0; i < patient_counter; i++)
     {
-        printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
+        if (patients[i].status == ACTIVE)
+        {
+
+            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
+        }
     }
 
     printf("-----------------------------------------------------------------------------------\n");
@@ -250,7 +240,6 @@ void savePatientsToFile()
     fclose(file);
 }
 
-
 // ----------------------------------------Display Menu Function
 void displayPatientMenu(void)
 {
@@ -263,8 +252,7 @@ void displayPatientMenu(void)
     printf("==============================\n");
 }
 
-
-//---------------------------------------------Load Patient 
+//---------------------------------------------Load Patient
 void loadPatientFromFile(void)
 
 {
