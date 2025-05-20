@@ -10,8 +10,8 @@
 int main()
 {
 
-    // patientModule();
-    doctorModule();
+    patientModule();
+    // doctorModule();
   
     return 0;
 }
