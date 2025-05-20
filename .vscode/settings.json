@@ -11,6 +11,8 @@
     "editor.defaultFormatter": "ms-vscode.cpptools"
   },
   "files.associations": {
-    "patient.h": "c"
+    "patient.h": "c",
+    "id_manager.h": "c",
+    "common.h": "c"
   }
 }
