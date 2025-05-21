@@ -105,12 +105,12 @@ void addDoctor()
 
         saveDoctorsToFile();
 
-        id_manager.next_patient_id++;
+        id_manager.next_doctor_id++;
 
         saveIDManager();
-        printf("Patient Entered Successfully!\n");
+        printf("doctor Entered Successfully!\n");
 
-        printf("Do you want to add another patient (Y/N)? ");
+        printf("Do you want to add another doctor (Y/N)? ");
         inputString(choice, sizeof(choice));
 
         /* code */
@@ -119,10 +119,46 @@ void addDoctor()
 
 void searchDoctorById()
 {
+
+    int id;
+    id = inputInt("Enter an Id : ");
+
+    for (int i = 0; i < doctor_counter; i++)
+    {
+        if (doctors[i].d_id == id)
+        {
+            printf("-----------------------------------------------------------------------------------\n");
+            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact");
+            printf("-----------------------------------------------------------------------------------\n");
+
+            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
+            return;
+        }
+        printf("doctor with ID %d not found.\n", id);
+    }
 }
 
 void searchDoctorByName()
 {
+    char d_name[50];
+    printf("Enter Name : ");
+
+    inputString(d_name, sizeof(d_name));
+
+    for (int i = 0; i < doctor_counter; i++)
+    {
+        while (strncasecmp(doctors[i].d_name, d_name, strlen(d_name)) == 0)
+        {
+            
+            printf("-----------------------------------------------------------------------------------\n");
+            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact");
+            printf("-----------------------------------------------------------------------------------\n");
+
+            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
+            return;
+        }
+        printf("doctor with name %s not found.\n", d_name);
+    }
 }
 
 void searchDoctorBySpecialization()
@@ -136,28 +172,61 @@ void deleteDoctor()
 // File handling
 void loadDoctorsFromFile()
 {
+    FILE *file = fopen("./data/doctor.dat", "rb");
+
+    fileCheck(file);
+    while (fread(&doctors[doctor_counter], sizeof(Doctor), 1, file) != 0)
+    {
+        doctor_counter++;
+    }
+    fclose(file);
 }
 
 void saveDoctorsToFile()
 {
+    FILE *file = fopen("./data/doctors.dat", "wb");
+
+    for (int i = 0; i < doctor_counter; i++)
+    {
+        fwrite(&doctors[i], sizeof(Doctor), 1, file);
+    }
+
+    fclose(file);
 }
 // Others
 
 void displayDoctorMenu()
 {
-    
-    
-        printf("\n=== Doctor Module ===\n");
-        printf("1. Add a Doctor\n");
-        printf("2. Display All Doctors\n");
-        printf("3. Search for a Doctor\n");
-        printf("4. Delete a Doctor\n");
-        printf("5. Exit\n");
-        printf("==============================\n");
-    
+
+    printf("\n=== Doctor Module ===\n");
+    printf("1. Add a Doctor\n");
+    printf("2. Display All Doctors\n");
+    printf("3. Search for a Doctor\n");
+    printf("4. Delete a Doctor\n");
+    printf("5. Exit\n");
+    printf("==============================\n");
 }
 
 void displayDoctors()
 {
-    
+    FILE *file = fopen("./data/doctor.dat", "rb");
+
+    fileCheck(file);
+
+    printf("\n List of All doctors:\n");
+    printf("-----------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact");
+    printf("-----------------------------------------------------------------------------------\n");
+    for (int i = 0; i < doctor_counter; i++)
+    {
+        if (doctors[i].status == ACTIVE)
+        {
+
+            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
+        }
+    }
+
+    printf("-----------------------------------------------------------------------------------\n");
+    if (doctor_counter == 0)
+        printf("No doctor records found.\n");
 }

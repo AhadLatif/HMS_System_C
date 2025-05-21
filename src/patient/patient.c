@@ -136,14 +136,14 @@ void searchPatientByName()
 {
     // while ((getchar()) != '\n');
 
-    char name[50];
+    char p_name[50];
     printf("Enter Name : ");
 
-    inputString(name, sizeof(name));
+    inputString(p_name, sizeof(p_name));
 
     for (int i = 0; i < patient_counter; i++)
     {
-        if (strcasecmp(patients[i].p_name, name) == 0)
+        if (strncasecmp(patients[i].p_name, p_name,strlen(p_name)) == 0)
         {
 
             printf("-----------------------------------------------------------------------------------\n");
@@ -155,7 +155,7 @@ void searchPatientByName()
             return;
         }
     }
-    printf("Patient with name : %s not found.\n", name);
+    printf("Patient with name : %s not found.\n", p_name);
 }
 
 //-----------------------------------Delete Patient--------------------
