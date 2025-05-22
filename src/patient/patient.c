@@ -143,7 +143,7 @@ void searchPatientByName()
 
     for (int i = 0; i < patient_counter; i++)
     {
-        if (strncasecmp(patients[i].p_name, p_name,strlen(p_name)) == 0)
+        if (strncasecmp(patients[i].p_name, p_name, strlen(p_name)) == 0)
         {
 
             printf("-----------------------------------------------------------------------------------\n");
@@ -163,11 +163,9 @@ void searchPatientByName()
 void deletePatient()
 {
 
-    int id;//, index = -1;
+    int id;
 
-    // while ((getchar()) != '\n')
     id = inputInt("Enter ID:");
-    // while ((getchar()) != '\n');
 
     for (int i = 0; i < patient_counter; i++)
     {
@@ -179,21 +177,10 @@ void deletePatient()
             savePatientsToFile();
         }
 
-        printf("Patient with ID %d not found.\n", id);
     }
+    printf("Patient with ID %d not found.\n", id);
 
-    // if (index == -1)
-    // {
-    //     printf("Patient with ID %d not found.\n", id);
-    //     return;
-    // }
-
-    // for (int j = index; j < patient_counter; j++)
-    // {
-    //     patients[j] = patients[j + 1];
-    // }
-
-    // patient_counter--;
+    
 }
 
 // SECONDARY FUNCTIONS

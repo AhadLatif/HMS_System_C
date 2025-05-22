@@ -30,10 +30,8 @@ void doctorModule()
             displayDoctors();
             break;
         case 3:
-        {
             searchDoctor();
-        }
-        break;
+            break;
         case 4:
             deleteDoctor();
             break;
@@ -107,32 +105,30 @@ void addDoctor()
     } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "no") != 0);
 }
 
-void searchDoctor(){
+void searchDoctor()
+{
 
-     char choice[20];
+    char choice[20];
 
     do
     {
-        
-        
+
         int search_choice;
         printf("Search Doctor by:\n1. ID\n2. Name\n3. Specialization\n");
         search_choice = inputInt("Enter choice: ");
         if (search_choice == 1)
-        searchDoctorById();
-    else if (search_choice == 2)
-        searchDoctorByName();
+            searchDoctorById();
+        else if (search_choice == 2)
+            searchDoctorByName();
         else if (search_choice == 3)
-        searchDoctorBySpecialization();
+            searchDoctorBySpecialization();
         else
-        printf("Invalid search choice!\n");
-
+            printf("Invalid search choice!\n");
 
         printf("Do you want to add another doctor (Y/N)? ");
         inputString(choice, sizeof(choice));
     } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "n") != 0);
 }
-
 
 void searchDoctorById()
 {
@@ -180,7 +176,10 @@ void searchDoctorByName()
     {
         printf("doctor with name %s not found.\n", d_name);
     }
-    else {  printf("You are all caught up!");}
+    else
+    {
+        printf("You are all caught up!");
+    }
 }
 
 void searchDoctorBySpecialization()
@@ -206,17 +205,35 @@ void searchDoctorBySpecialization()
     {
         printf("Doctor With Specialization %s Not Found!.\n", specialization);
     }
-    else{
+    else
+    {
 
         printf("You are all caught up!");
-
-        }
-        }
-
-
+    }
+}
 
 void deleteDoctor()
 {
+
+    int id, is_deleted =0;
+    id = inputInt("Enter an Id: ");
+
+    for (int i = 0; i < doctor_counter; i++)
+    {
+        if (doctors[i].d_id == id && doctors[i].status == ACTIVE)
+        {
+            doctors[i].status = DEACTIVE;
+            printf("Doctor with ID %d is deleted successfully.\n", id);
+            is_deleted=1;
+            saveDoctorsToFile();
+        }
+
+    }
+    if (!is_deleted)
+    {
+        printf("Patient with ID %d not found.\n", id);
+        
+    }
     
 }
 
