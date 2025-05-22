@@ -34,6 +34,7 @@ void displayDoctors();
 void searchDoctorById();
 void searchDoctorByName();
 void searchDoctorBySpecialization();
+void searchDoctor();
 void deleteDoctor();
 
 // OTHERS
