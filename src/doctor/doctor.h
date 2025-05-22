@@ -7,9 +7,8 @@
 
 typedef enum
 {
-
-    ACTIVE,
-    DEACTIVE
+    DOCTOR_ACTIVE,
+    DOCTOR_DEACTIVE
 } DoctorStatus;
 
 typedef struct

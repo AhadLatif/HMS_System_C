@@ -87,7 +87,7 @@ void addDoctor()
         printf("Enter contact number: ");
         inputString(new_doctor.d_contact, sizeof(new_doctor.d_contact));
 
-        new_doctor.status = ACTIVE;
+        new_doctor.status = DOCTOR_ACTIVE;
 
         doctors[doctor_counter++] = new_doctor;
 
@@ -138,7 +138,7 @@ void searchDoctorById()
 
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (doctors[i].d_id == id && doctors[i].status == ACTIVE)
+        if (doctors[i].d_id == id && doctors[i].status == DOCTOR_ACTIVE)
         {
             printf("-----------------------------------------------------------------------------------\n");
             printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact");
@@ -165,7 +165,7 @@ void searchDoctorByName()
 
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (strncasecmp(doctors[i].d_name, d_name, strlen(d_name)) == 0 && doctors[i].status == ACTIVE)
+        if (strncasecmp(doctors[i].d_name, d_name, strlen(d_name)) == 0 && doctors[i].status == DOCTOR_ACTIVE)
         {
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
             found = 1;
@@ -194,7 +194,7 @@ void searchDoctorBySpecialization()
     printf("-----------------------------------------------------------------------------------\n");
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (strncasecmp(doctors[i].d_specialization, specialization, strlen(specialization)) == 0 && doctors[i].status==ACTIVE)
+        if (strncasecmp(doctors[i].d_specialization, specialization, strlen(specialization)) == 0 && doctors[i].status==DOCTOR_ACTIVE)
         {
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
             found = 1;
@@ -220,9 +220,9 @@ void deleteDoctor()
 
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (doctors[i].d_id == id && doctors[i].status == ACTIVE)
+        if (doctors[i].d_id == id && doctors[i].status == DOCTOR_ACTIVE)
         {
-            doctors[i].status = DEACTIVE;
+            doctors[i].status = DOCTOR_DEACTIVE;
             printf("Doctor with ID %d is deleted successfully.\n", id);
             is_deleted = 1;
             saveDoctorsToFile();
@@ -284,7 +284,7 @@ void displayDoctors()
     printf("-----------------------------------------------------------------------------------\n");
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (doctors[i].status == ACTIVE)
+        if (doctors[i].status == DOCTOR_ACTIVE)
         {
 
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
