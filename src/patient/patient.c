@@ -53,7 +53,7 @@ void patientModule()
             printf("Invalid choice! Please enter a number between 1 and 5.\n");
         }
 
-        printf("\nPress Enter to continue...");
+        // printf("\nPress Enter to continue...");
         // while (getchar() != '\n';
 
     } while (choice != 5);
@@ -113,19 +113,18 @@ void addPatient()
 //  ---------------------------------------Search Functions
 void searchPatientById()
 {
-    // while ((getchar()) != '\n');
     int id;
-    id = inputInt("Enter age : ");
+    id = inputInt("Enter Id of patient : ");
 
+    printf("-----------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
     for (int i = 0; i < patient_counter; i++)
     {
-        if (patients[i].p_id == id)
+        if (patients[i].p_id == id && patients[i].status == ACTIVE)
         {
-            printf("-----------------------------------------------------------------------------------\n");
-            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
-            printf("-----------------------------------------------------------------------------------\n");
 
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
+            printf("-----------------------------------------------------------------------------------\n");
             return;
         }
     }
@@ -134,28 +133,34 @@ void searchPatientById()
 
 void searchPatientByName()
 {
-    // while ((getchar()) != '\n');
 
     char name[50];
+    int found = 0;
     printf("Enter Name : ");
 
     inputString(name, sizeof(name));
 
+    printf("-----------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
     for (int i = 0; i < patient_counter; i++)
     {
-        if (strcasecmp(patients[i].p_name, name) == 0)
+        if (strncasecmp(patients[i].p_name, name, strlen(name)) == 0 && patients[i].status == ACTIVE)
         {
 
-            printf("-----------------------------------------------------------------------------------\n");
-            printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
-            printf("-----------------------------------------------------------------------------------\n");
-
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
-
-            return;
+            found = 1;
         }
     }
-    printf("Patient with name : %s not found.\n", name);
+    printf("-----------------------------------------------------------------------------------\n");
+    if (!found)
+    {
+        printf("Patient with name : %s not found.", name);
+        /* code */
+    }
+    else
+    {
+        printf("You are all caught up");
+    }
 }
 
 //-----------------------------------Delete Patient--------------------
@@ -163,37 +168,26 @@ void searchPatientByName()
 void deletePatient()
 {
 
-    int id;//, index = -1;
+    int id, found = 0;
 
-    // while ((getchar()) != '\n')
     id = inputInt("Enter ID:");
-    // while ((getchar()) != '\n');
 
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].p_id == id && patients[i].status == ACTIVE)
         {
-            // index = i;
+
             patients[i].status = DEACTIVE;
             printf("Patient with ID %d  deleted successfully.\n", id);
+            found = 1;
             savePatientsToFile();
         }
+    }
+    if (!found)
+    {
 
         printf("Patient with ID %d not found.\n", id);
     }
-
-    // if (index == -1)
-    // {
-    //     printf("Patient with ID %d not found.\n", id);
-    //     return;
-    // }
-
-    // for (int j = index; j < patient_counter; j++)
-    // {
-    //     patients[j] = patients[j + 1];
-    // }
-
-    // patient_counter--;
 }
 
 // SECONDARY FUNCTIONS
