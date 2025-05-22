@@ -5,10 +5,10 @@
 
 typedef enum{
 
-    ACTIVE,
-    DEACTIVE,
-    DISCHARGED,
-    UNDER_DYGNOSIS
+    PATIENT_ACTIVE,
+    PATIENT_DEACTIVE,
+    PATIENT_DISCHARGED,
+    PATIENT_UNDER_DYGNOSIS
 }PatientStatus;
 
 typedef struct

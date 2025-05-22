@@ -78,7 +78,7 @@ void addPatient()
 
         for (int i = 0; i < patient_counter; i++)
         {
-            if (patients[i].p_id == new_patient.p_id && patients[i].status == ACTIVE)
+            if (patients[i].p_id == new_patient.p_id && patients[i].status == PATIENT_ACTIVE)
             {
                 printf("ID %d already exists", new_patient.p_id);
             }
@@ -97,7 +97,7 @@ void addPatient()
 
         printf("Enter contact number: ");
         inputString(new_patient.p_contact_num, sizeof(new_patient.p_contact_num));
-        new_patient.status = ACTIVE;
+        new_patient.status = PATIENT_ACTIVE;
         patients[patient_counter++] = new_patient;
         savePatientsToFile();
         id_manager.next_patient_id++;
@@ -120,7 +120,7 @@ void searchPatientById()
     printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
     for (int i = 0; i < patient_counter; i++)
     {
-        if (patients[i].p_id == id && patients[i].status == ACTIVE)
+        if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
         {
 
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
@@ -144,7 +144,7 @@ void searchPatientByName()
     printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact");
     for (int i = 0; i < patient_counter; i++)
     {
-        if (strncasecmp(patients[i].p_name, name, strlen(name)) == 0 && patients[i].status == ACTIVE)
+        if (strncasecmp(patients[i].p_name, name, strlen(name)) == 0 && patients[i].status == PATIENT_ACTIVE)
         {
 
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
@@ -174,10 +174,10 @@ void deletePatient()
 
     for (int i = 0; i < patient_counter; i++)
     {
-        if (patients[i].p_id == id && patients[i].status == ACTIVE)
+        if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
         {
 
-            patients[i].status = DEACTIVE;
+            patients[i].status = PATIENT_DEACTIVE;
             printf("Patient with ID %d  deleted successfully.\n", id);
             found = 1;
             savePatientsToFile();
@@ -206,7 +206,7 @@ void displayPatient()
     printf("-----------------------------------------------------------------------------------\n");
     for (int i = 0; i < patient_counter; i++)
     {
-        if (patients[i].status == ACTIVE)
+        if (patients[i].status == PATIENT_ACTIVE)
         {
 
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num);
