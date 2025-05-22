@@ -1,6 +1,5 @@
-#ifndef DOCTOR_H
-#define DOCTOR_H
 
+<<<<<<< HEAD
 #include "src/patient/patient.h"
 // Doctor structure definition
 #define MAX_DOCTORS 100
@@ -46,3 +45,5 @@ void loadDoctorsFromFile();
 void saveDoctorsToFile();
 
 #endif
+=======
+>>>>>>> Patient-Module-18-05-2025
