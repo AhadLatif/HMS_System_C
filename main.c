@@ -9,23 +9,27 @@
 
 int main()
 {
+    int selection;
+    printf("Select an option:\n");
+    printf("1. Doctor Module\n");
+    printf("2. Patient Module\n");
+    printf("Enter your choice: ");
+    if (scanf("%d", &selection) != 1) {
+        printf("Invalid input. Exiting.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    int choice;
-    printf("1. Patient Module\n");
-    printf("2. Doctor Module\n");
-    choice = inputInt("Choose an option :");
-
-    switch (choice)
-    { 
-    case 1:
-        patientModule();
-        break;
-    case 2:
-        doctorModule();
-        break;
-    default:
-        printf("Invalid choice.\n");
-        break;
+    switch(selection)
+    {
+        case 1:
+            doctorModule();
+            break;
+        case 2:
+            patientModule();
+            break;
+        default:
+            printf("Invalid option.\n");
+            break;
     }
 
     return 0;

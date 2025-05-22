@@ -1,15 +1,18 @@
 
-<<<<<<< HEAD
-#include "src/patient/patient.h"
+// <<<<<<<
+#ifndef DOCTOR_H
+#define DOCTOR_H
+// #include "src/patient/patient.h"
 // Doctor structure definition
 #define MAX_DOCTORS 100
 
 typedef enum
 {
 
-    ACTIVE,
-    DEACTIVE
-} DoctorStatus;
+    DOCTOR_ACTIVE,
+    DOCTOR_DEACTIVE,
+
+} doctorStatus;
 
 typedef struct
 {
@@ -19,7 +22,7 @@ typedef struct
     char d_gender[10];
     char d_specialization[50];
     char d_contact[15];
-    DoctorStatus status;
+    doctorStatus status;
 
 } Doctor;
 
@@ -45,5 +48,5 @@ void loadDoctorsFromFile();
 void saveDoctorsToFile();
 
 #endif
-=======
->>>>>>> Patient-Module-18-05-2025
+// =======
+// >>>>>>> Patient-Module-18-05-2025

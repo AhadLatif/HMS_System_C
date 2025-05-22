@@ -1,17 +1,17 @@
-<<<<<<< HEAD
-=======
+// <<<<<<< HEAD
+// =======
 #ifndef PATIENT_H
 #define PATIENT_H
 
 #define MAX_PATIENTS 100
 
-typedef enum{
-
-    ACTIVE,
-    DEACTIVE,
-    DISCHARGED,
-    UNDER_DYGNOSIS
-}PatientStatus;
+typedef enum
+{
+    PATIENT_ACTIVE,
+    PATIENT_DEACTIVE,
+    PATIENT_DISCHARGED,
+    PATIENT_UNDER_DYGNOSIS
+} patientStatus;
 
 typedef struct
 {
@@ -22,7 +22,7 @@ typedef struct
     char p_gender[10];
     char p_disease[50];
     int assigned_d_id;
-    PatientStatus status;
+    patientStatus status;
     // int p_admission_d[20];
     // char p_status[20];
 } Patient;
@@ -50,4 +50,4 @@ void savePatientsToFile();
 void loadPatientFromFile();
 
 #endif
->>>>>>> Patient-Module-18-05-2025
+// >>>>>>> Patient-Module-18-05-2025
