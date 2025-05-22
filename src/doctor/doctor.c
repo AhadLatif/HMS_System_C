@@ -194,7 +194,7 @@ void searchDoctorBySpecialization()
     printf("-----------------------------------------------------------------------------------\n");
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (strncasecmp(doctors[i].d_specialization, specialization, strlen(specialization)) == 0)
+        if (strncasecmp(doctors[i].d_specialization, specialization, strlen(specialization)) == 0 && doctors[i].status==ACTIVE)
         {
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
             found = 1;
