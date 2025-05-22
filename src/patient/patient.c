@@ -78,7 +78,7 @@ void addPatient()
 
         for (int i = 0; i < patient_counter; i++)
         {
-            if (patients[i].p_id == new_patient.p_id)
+            if (patients[i].p_id == new_patient.p_id && patients[i].status == ACTIVE)
             {
                 printf("ID %d already exists", new_patient.p_id);
             }
