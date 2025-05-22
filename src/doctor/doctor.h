@@ -5,12 +5,12 @@
 // Doctor structure definition
 #define MAX_DOCTORS 100
 
-// typedef enum
-// {
+typedef enum
+{
 
-//     ACTIVE,
-//     DEACTIVE
-// } DoctorStatus;
+    ACTIVE,
+    DEACTIVE
+} DoctorStatus;
 
 typedef struct
 {
@@ -20,7 +20,7 @@ typedef struct
     char d_gender[10];
     char d_specialization[50];
     char d_contact[15];
-    Status status;
+    DoctorStatus status;
 
 } Doctor;
 

@@ -138,7 +138,7 @@ void searchDoctorById()
 
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (doctors[i].d_id == id)
+        if (doctors[i].d_id == id && doctors[i].status == ACTIVE)
         {
             printf("-----------------------------------------------------------------------------------\n");
             printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact");
@@ -165,7 +165,7 @@ void searchDoctorByName()
 
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (strncasecmp(doctors[i].d_name, d_name, strlen(d_name)) == 0)
+        if (strncasecmp(doctors[i].d_name, d_name, strlen(d_name)) == 0 && doctors[i].status == ACTIVE)
         {
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s |\n", doctors[i].d_id, doctors[i].d_name, doctors[i].d_age, doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_contact);
             found = 1;
@@ -215,7 +215,7 @@ void searchDoctorBySpecialization()
 void deleteDoctor()
 {
 
-    int id, is_deleted =0;
+    int id, is_deleted = 0;
     id = inputInt("Enter an Id: ");
 
     for (int i = 0; i < doctor_counter; i++)
@@ -224,17 +224,14 @@ void deleteDoctor()
         {
             doctors[i].status = DEACTIVE;
             printf("Doctor with ID %d is deleted successfully.\n", id);
-            is_deleted=1;
+            is_deleted = 1;
             saveDoctorsToFile();
         }
-
     }
     if (!is_deleted)
     {
         printf("Patient with ID %d not found.\n", id);
-        
     }
-    
 }
 
 // File handling
