@@ -1,8 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-
-
+void mainFunction();
 
 void inputString(char *target, int size);
 

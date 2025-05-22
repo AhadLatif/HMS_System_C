@@ -47,7 +47,7 @@ void patientModule()
             deletePatient();
             break;
         case 5:
-            exitProgram();
+            mainFunction();
             break;
             // return 0;
         default:

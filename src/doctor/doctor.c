@@ -20,6 +20,7 @@ void doctorModule()
     {
         displayDoctorMenu();
         choice = inputInt("Enter your choice: ");
+        getchar();
 
         switch (choice)
         {
@@ -36,7 +37,7 @@ void doctorModule()
             deleteDoctor();
             break;
         case 5:
-            exitProgram();
+            mainFunction();
             break;
             // return 0;
         default:
@@ -178,7 +179,7 @@ void searchDoctorByName()
     }
     else
     {
-        printf("You are all caught up!");
+        printf("You are all caught up!\n");
     }
 }
 

@@ -11,6 +11,39 @@
 
 
 
+void mainFunction()
+{
+    int selection;
+    printf("Select an option:\n");
+    printf("1. Doctor Module\n");
+    printf("2. Patient Module\n");
+    printf("3. Exit Program \n");
+    printf("Enter your choice: ");
+    if (scanf("%d", &selection) != 1)
+    {
+        printf("Invalid input. Exiting.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    
+    
+    switch (selection)
+    {
+
+    case 1:
+        doctorModule();
+        break;
+    case 2:
+        patientModule();
+        break;
+    case 3:
+        exitProgram();
+        break;
+    default:
+        printf("Invalid option.\n");
+        break;
+    }
+}
 void welcomScreen(void)
 {
     printf("\n\n\n\n\n\n\n\t\t\t\t--------------------------------------------");
