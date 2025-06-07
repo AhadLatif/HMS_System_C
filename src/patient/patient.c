@@ -245,47 +245,50 @@ void deletePatient()
 
 void updatePatientById()
 {
+    int id = inputInt("\nEnter ID of patient: ");
     int found = 0;
-    int id = inputInt("\nEnter Id of patient: ");
 
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
         {
             found = 1;
+            int updated = 0;
 
             while (1)
             {
-                printf("\nExisting Info of patient with id %d:\n\n", id);
+                printf("\n--- Existing Info of patient with ID %d ---\n", id);
                 printf("1. Name           : %s\n", patients[i].p_name);
                 printf("2. Age            : %d\n", patients[i].p_age);
                 printf("3. Gender         : %s\n", patients[i].p_gender);
                 printf("4. Disease        : %s\n", patients[i].p_disease);
                 printf("5. Contact Number : %s\n", patients[i].p_contact_num);
-                printf("6. <<<< Go Back\n\n");
+                printf("6. << Go Back (Finish Updating)\n\n");
 
-                int choice = inputInt("Which field do you want to change (1-6) : ");
+                int choice = inputInt("Which field do you want to change (1-6): ");
                 while (choice < 1 || choice > 6)
                 {
                     printf("Invalid choice! Please enter a valid choice between 1 and 6.\n");
                     choice = inputInt("Enter a choice: ");
                 }
-                if (choice == 6)
-                    return;
 
-                // Ask for confirmation before continuing with update
-                char *fieldName[] = {"NAME", "AGE", "GENDER", "DISEASE", "CONTACT NUMBER"};
-                printf("\nYou choose to update *%s*. Do you really want to:\n\n", fieldName[choice - 1]);
+                if (choice == 6)
+                {
+                    break; // Exit the loop to final save/cancel decision
+                }
+
+                const char *fieldName[] = {"Name", "Age", "Gender", "Disease", "Contact Number"};
+                printf("\nYou chose to update *%s*.\n", fieldName[choice - 1]);
                 printf("1. Proceed to update\n");
-                printf("2. Go back to menu\n\n");
+                printf("2. Go back to menu\n");
                 int sub_choice = inputInt("Enter your choice: ");
 
-                if (sub_choice == 2)
+                if (sub_choice != 1)
                 {
                     continue; // Go back to field menu
                 }
 
-                // Update field
+                // Update selected field
                 switch (choice)
                 {
                 case 1:
@@ -307,48 +310,205 @@ void updatePatientById()
                     printf("Enter new contact number: ");
                     inputString(patients[i].p_contact_num, sizeof(patients[i].p_contact_num));
                     break;
+                }
 
-                case 6:
+                updated = 1;
 
-                    // printf(" Field updated! You can change more fields or save & exit.\n");
-                    return;
+                printf("\nDo you want to update another field?\n");
+                printf("1. Yes\n");
+                printf("2. No (Continue to Save)\n");
+                int more = inputInt("Enter your choice: ");
+                if (more != 1)
+                {
                     break;
                 }
             }
 
-            int sub_choice2;
+            if (updated)
+            {
+                printf("\nDo you want to save the changes?\n");
+                printf("1. Save and Exit\n");
+                printf("2. Cancel without Saving\n\n");
+                int sub_choice2 = inputInt("Enter your choice: ");
 
-            printf(" 1. Save and Exit\n");
-            printf(" 2. Cancel without Saving\n\n");
-            sub_choice2 = inputInt("Enter a Choice");
-            while (sub_choice2 != 1 && sub_choice2 != 2)
-            {
-                printf("Choose correct Option\n\n");
-                printf(" 1. Save and Exit\n");
-                printf(" 2. Cancel without Saving\n\n");
-            }
-            if (sub_choice2 == 1)
-            {
-                savePatientsToFile();
-                printf(" Patient record updated and saved successfully.\n");
-                break;
+                while (sub_choice2 != 1 && sub_choice2 != 2)
+                {
+                    printf("Invalid option. Please try again.\n");
+                    sub_choice2 = inputInt("Enter your choice: ");
+                }
+
+                if (sub_choice2 == 1)
+                {
+                    savePatientsToFile();
+                    printf("\n Patient record updated and saved successfully.\n");
+                }
+                else
+                {
+                    printf("\n Update cancelled. No changes were saved.\n");
+                }
             }
             else
             {
-                printf("Update cancelled. No changes were saved.\n");
-                break;
+                printf("\n No changes were made to the patient record.\n");
             }
+
+            break; // Update only the first matching record
         }
     }
 
     if (!found)
     {
-        printf("\nNo active patient found with ID %d.\n", id);
+        printf("\n No active patient found with ID %d.\n", id);
     }
 }
 
 void updatePatientByName()
 {
+    char name[50];
+    printf("\nEnter name of patient: ");
+    inputString(name, sizeof(name));
+
+    int matches[100]; // To store indexes of matching patients
+    int matchCount = 0;
+
+    // Collect all matching patients (case-insensitive substring match)
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (patients[i].status == PATIENT_ACTIVE && strncasecmp(patients[i].p_name, name, strlen(name)) == 0)
+        {
+            matches[matchCount++] = i;
+        }
+    }
+
+    if (matchCount == 0)
+    {
+        printf("\n No active patients found matching '%s'.\n", name);
+        return;
+    }
+
+    int select_index = -1;
+
+    if (matchCount == 1)
+    {
+        select_index = matches[0]; // Only one match
+    }
+    else
+    {
+        printf("\n Multiple patients found with matching name:\n\n");
+        printf("---------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s |\n\n", "No.", "ID", "Name", "Age", "Gender", "Disease", "Contact");
+
+        for (int i = 0; i < matchCount; i++)
+        {
+            int idx = matches[i];
+            printf(" %-5d | %-5d |%-20s | %-3d | %-10s | %-15s | %-15s |\n",
+                   i + 1, patients[idx].p_id, patients[idx].p_name, patients[idx].p_age,
+                   patients[idx].p_gender, patients[idx].p_disease, patients[idx].p_contact_num);
+        }
+        printf("---------------------------------------------------------------------------------------------\n");
+
+        printf("\nSelect the number of the patient you want to update (1-%d): ", matchCount);
+        int choice = inputInt("");
+
+        while (choice < 1 || choice > matchCount)
+        {
+            printf(" Invalid choice. Enter a number between 1 and %d: ", matchCount);
+            choice = inputInt("");
+        }
+
+        select_index = matches[choice - 1];
+    }
+
+    int updated = 0;
+    while (1)
+    {
+        printf("\n--- Existing Info of patient ---\n");
+        printf("1. Name           : %s\n", patients[select_index].p_name);
+        printf("2. Age            : %d\n", patients[select_index].p_age);
+        printf("3. Gender         : %s\n", patients[select_index].p_gender);
+        printf("4. Disease        : %s\n", patients[select_index].p_disease);
+        printf("5. Contact Number : %s\n", patients[select_index].p_contact_num);
+        printf("6. << Go Back (Finish Updating)\n\n");
+
+        int choice = inputInt("Which field do you want to change (1-6): ");
+        while (choice < 1 || choice > 6)
+        {
+            printf("Invalid choice! Please enter a valid choice between 1 and 6.\n");
+            choice = inputInt("Enter a choice: ");
+        }
+
+        if (choice == 6)
+            break;
+
+        const char *fieldName[] = {"Name", "Age", "Gender", "Disease", "Contact Number"};
+        printf("\nYou chose to update *%s*.\n", fieldName[choice - 1]);
+        printf("1. Proceed to update\n");
+        printf("2. Go back to menu\n");
+        int sub_choice = inputInt("Enter your choice: ");
+
+        if (sub_choice != 1)
+            continue;
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter new name: ");
+            inputString(patients[select_index].p_name, sizeof(patients[select_index].p_name));
+            break;
+        case 2:
+            patients[select_index].p_age = inputInt("Enter new age: ");
+            break;
+        case 3:
+            printf("Enter new gender: ");
+            inputString(patients[select_index].p_gender, sizeof(patients[select_index].p_gender));
+            break;
+        case 4:
+            printf("Enter new disease: ");
+            inputString(patients[select_index].p_disease, sizeof(patients[select_index].p_disease));
+            break;
+        case 5:
+            printf("Enter new contact number: ");
+            inputString(patients[select_index].p_contact_num, sizeof(patients[select_index].p_contact_num));
+            break;
+        }
+
+        updated = 1;
+
+        printf("\nDo you want to update another field?\n");
+        printf("1. Yes\n");
+        printf("2. No (Proceed to save)\n");
+        int more = inputInt("Enter your choice: ");
+        if (more != 1)
+            break;
+    }
+
+    if (updated)
+    {
+        printf("\nDo you want to save the changes?\n");
+        printf("1. Save and Exit\n");
+        printf("2. Cancel without Saving\n\n");
+        int sub_choice2 = inputInt("Enter your choice: ");
+
+        while (sub_choice2 != 1 && sub_choice2 != 2)
+        {
+            printf("Invalid option. Please try again.\n");
+            sub_choice2 = inputInt("Enter your choice: ");
+        }
+
+        if (sub_choice2 == 1)
+        {
+            savePatientsToFile();
+            printf("\n Patient record updated and saved successfully.\n");
+        }
+        else
+        {
+            printf("\n Update cancelled. No changes were saved.\n");
+        }
+    }
+    else
+    {
+        printf("\n No changes were made to the patient record.\n");
+    }
 }
 
 // SECONDARY FUNCTIONS
