@@ -36,6 +36,8 @@ void addPatient();
 void searchPatientById();
 void searchPatientByName();
 void deletePatient();
+void updatePatientById();
+void updatePatientByName();
 
 // Screen Functions
 

@@ -72,30 +72,24 @@ int inputInt(const char *prompt)
     {
         printf("%s", prompt);
 
-        // Get input as a string
-        if (fgets(buffer, sizeof(buffer), stdin) != NULL)
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
         {
-            // Remove newline character if present
-            size_t len = strlen(buffer);
-            if (len > 0 && buffer[len - 1] == '\n')
-            {
-                buffer[len - 1] = '\0';
-            }
+            printf("Error reading input.\n");
+            continue;
+        }
 
-            // Try to parse as integer
-            char extra;
-            if (sscanf(buffer, "%d %c", &value, &extra) == 1)
-            {
-                return value;
-            }
-            else
-            {
-                printf("Invalid input. Please enter an integer.\n");
-            }
+        // Trim trailing newline if present
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Check if input is a valid integer (and only integer)
+        char extra;
+        if (sscanf(buffer, " %d %c", &value, &extra) == 1)
+        {
+            return value;
         }
         else
         {
-            printf(" Error reading input.\n");
+            printf("❌ Invalid input. Please enter a valid integer.\n");
         }
     }
 }

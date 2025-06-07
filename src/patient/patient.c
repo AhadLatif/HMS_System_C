@@ -31,21 +31,58 @@ void patientModule()
             break;
         case 3:
         {
+
             int search_choice;
-            printf("Search Patient by:\n1. ID\n2. Name\n");
+            printf("Search Patient by:\n1. ID\n2. Name\n3.<<<<<Go Back\n");
             search_choice = inputInt("Enter choice: ");
+            while (search_choice != 1 && search_choice != 2 && search_choice != 3)
+            {
+
+                printf("Please choose correct option!");
+                printf("1. ID\n2. Name\n3.<<<<<Go Back\n");
+                search_choice = inputInt("Enter choice: ");
+            }
+
             if (search_choice == 1)
                 searchPatientById();
             else if (search_choice == 2)
                 searchPatientByName();
+            else if (search_choice == 3)
+                continue;
             else
                 printf("Invalid search choice!\n");
         }
         break;
         case 4:
+        {
+
+            int choice;
+
+            printf("\nUpdate Patient by:\n1. ID\n2. Name\n3.<<<<<Go Back\n");
+            choice = inputInt("Enter choice: ");
+            while (choice != 1 && choice != 2 && choice != 3)
+            {
+
+                printf("Please choose correct option!");
+                printf("1. ID\n2. Name\n3.<<<<<Go Back\n");
+                choice = inputInt("Enter choice: ");
+            }
+
+            if (choice == 1)
+                updatePatientById();
+            else if (choice == 2)
+                updatePatientByName();
+            else if (choice == 3)
+                continue;
+            else
+                printf("Invalid search choice!\n");
+            break;
+        }
+        case 5:
             deletePatient();
             break;
-        case 5:
+
+        case 6:
             exitProgram();
             break;
             // return 0;
@@ -55,7 +92,6 @@ void patientModule()
 
         // printf("\nPress Enter to continue...");
         // while (getchar() != '\n';
-
     } while (choice != 5);
 }
 
@@ -65,49 +101,64 @@ void patientModule()
 void addPatient()
 {
     char choice[10];
-    do
+    int sub_choice;
+    sub_choice = inputInt("Want to : \n1.Add patient \n2.t<<<<Go Back\n\nConfirm by Choice:");
+    while (sub_choice != 1 && sub_choice != 2)
     {
-        if (patient_counter > MAX_PATIENTS)
-        {
-            printf("List is full\n");
-            return;
-        }
+        printf("Choose Correct Option: ");
+    }
 
-        Patient new_patient;
-        new_patient.p_id = id_manager.next_patient_id;
-
-        for (int i = 0; i < patient_counter; i++)
+    if (sub_choice == 1)
+    {
+        do
         {
-            if (patients[i].p_id == new_patient.p_id && patients[i].status == PATIENT_ACTIVE)
+            if (patient_counter > MAX_PATIENTS)
             {
-                printf("ID %d already exists", new_patient.p_id);
+                printf("List is full\n");
+                return;
             }
-        }
 
-        printf("Enter name: ");
-        inputString(new_patient.p_name, sizeof(new_patient.p_name));
+            Patient new_patient;
+            new_patient.p_id = id_manager.next_patient_id;
 
-        new_patient.p_age = inputInt("Enter your age: ");
+            for (int i = 0; i < patient_counter; i++)
+            {
+                if (patients[i].p_id == new_patient.p_id && patients[i].status == PATIENT_ACTIVE)
+                {
+                    printf("ID %d already exists\n", new_patient.p_id);
+                    return;
+                }
+            }
 
-        printf("Enter gender: ");
-        inputString(new_patient.p_gender, sizeof(new_patient.p_gender));
+            printf("\nEnter name: ");
+            inputString(new_patient.p_name, sizeof(new_patient.p_name));
 
-        printf("Enter disease: ");
-        inputString(new_patient.p_disease, sizeof(new_patient.p_disease));
+            new_patient.p_age = inputInt("Enter your age: ");
 
-        printf("Enter contact number: ");
-        inputString(new_patient.p_contact_num, sizeof(new_patient.p_contact_num));
-        new_patient.status = PATIENT_ACTIVE;
-        patients[patient_counter++] = new_patient;
-        savePatientsToFile();
-        id_manager.next_patient_id++;
-        saveIDManager();
-        printf("Patient Entered Successfully!\n");
+            printf("Enter gender: ");
+            inputString(new_patient.p_gender, sizeof(new_patient.p_gender));
 
-        printf("Do you want to add another patient (Y/N)? ");
-        inputString(choice, sizeof(choice));
+            printf("Enter disease: ");
+            inputString(new_patient.p_disease, sizeof(new_patient.p_disease));
 
-    } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "no") != 0);
+            printf("Enter contact number: ");
+            inputString(new_patient.p_contact_num, sizeof(new_patient.p_contact_num));
+            new_patient.status = PATIENT_ACTIVE;
+            patients[patient_counter++] = new_patient;
+            savePatientsToFile();
+            id_manager.next_patient_id++;
+            saveIDManager();
+            printf("Patient Entered Successfully!\n");
+
+            printf("Do you want to add another patient (Y/N)? ");
+            inputString(choice, sizeof(choice));
+
+        } while (strcasecmp(choice, "n") != 0 && strcasecmp(choice, "no") != 0);
+    }
+    else if (sub_choice == 2)
+    {
+        return;
+    }
 }
 
 //  ---------------------------------------Search Functions
@@ -190,6 +241,116 @@ void deletePatient()
     }
 }
 
+// Update Function
+
+void updatePatientById()
+{
+    int found = 0;
+    int id = inputInt("\nEnter Id of patient: ");
+
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
+        {
+            found = 1;
+
+            while (1)
+            {
+                printf("\nExisting Info of patient with id %d:\n\n", id);
+                printf("1. Name           : %s\n", patients[i].p_name);
+                printf("2. Age            : %d\n", patients[i].p_age);
+                printf("3. Gender         : %s\n", patients[i].p_gender);
+                printf("4. Disease        : %s\n", patients[i].p_disease);
+                printf("5. Contact Number : %s\n", patients[i].p_contact_num);
+                printf("6. <<<< Go Back\n\n");
+
+                int choice = inputInt("Which field do you want to change (1-6) : ");
+                while (choice < 1 || choice > 6)
+                {
+                    printf("Invalid choice! Please enter a valid choice between 1 and 6.\n");
+                    choice = inputInt("Enter a choice: ");
+                }
+                if (choice == 6)
+                    return;
+
+                // Ask for confirmation before continuing with update
+                char *fieldName[] = {"NAME", "AGE", "GENDER", "DISEASE", "CONTACT NUMBER"};
+                printf("\nYou choose to update *%s*. Do you really want to:\n\n", fieldName[choice - 1]);
+                printf("1. Proceed to update\n");
+                printf("2. Go back to menu\n\n");
+                int sub_choice = inputInt("Enter your choice: ");
+
+                if (sub_choice == 2)
+                {
+                    continue; // Go back to field menu
+                }
+
+                // Update field
+                switch (choice)
+                {
+                case 1:
+                    printf("Enter new name: ");
+                    inputString(patients[i].p_name, sizeof(patients[i].p_name));
+                    break;
+                case 2:
+                    patients[i].p_age = inputInt("Enter new age: ");
+                    break;
+                case 3:
+                    printf("Enter new gender: ");
+                    inputString(patients[i].p_gender, sizeof(patients[i].p_gender));
+                    break;
+                case 4:
+                    printf("Enter new disease: ");
+                    inputString(patients[i].p_disease, sizeof(patients[i].p_disease));
+                    break;
+                case 5:
+                    printf("Enter new contact number: ");
+                    inputString(patients[i].p_contact_num, sizeof(patients[i].p_contact_num));
+                    break;
+
+                case 6:
+
+                    // printf(" Field updated! You can change more fields or save & exit.\n");
+                    return;
+                    break;
+                }
+            }
+
+            int sub_choice2;
+
+            printf(" 1. Save and Exit\n");
+            printf(" 2. Cancel without Saving\n\n");
+            sub_choice2 = inputInt("Enter a Choice");
+            while (sub_choice2 != 1 && sub_choice2 != 2)
+            {
+                printf("Choose correct Option\n\n");
+                printf(" 1. Save and Exit\n");
+                printf(" 2. Cancel without Saving\n\n");
+            }
+            if (sub_choice2 == 1)
+            {
+                savePatientsToFile();
+                printf(" Patient record updated and saved successfully.\n");
+                break;
+            }
+            else
+            {
+                printf("Update cancelled. No changes were saved.\n");
+                break;
+            }
+        }
+    }
+
+    if (!found)
+    {
+        printf("\nNo active patient found with ID %d.\n", id);
+    }
+}
+
+void updatePatientByName()
+{
+}
+
 // SECONDARY FUNCTIONS
 
 // --------------------------------------------Display Patients
@@ -241,8 +402,9 @@ void displayPatientMenu(void)
     printf("1. Add a Patient\n");
     printf("2. Display All Patients\n");
     printf("3. Search for a Patient\n");
-    printf("4. Delete a Patient\n");
-    printf("5. Exit\n");
+    printf("4. Update a Patient\n");
+    printf("5. Delete a Patient\n");
+    printf("6. Exit\n");
     printf("==============================\n");
 }
 
