@@ -20,8 +20,4 @@ Thumbs.db
 
 # Ignore binary data files if not essential
 /data/*.dat
-<<<<<<< HEAD
 !data/meta.dat   # keep meta.dat if you want to track it for ID management
-=======
-!data/meta.dat   # keep meta.dat if you want to track it for ID management
->>>>>>> Patient-Module-18-05-2025
