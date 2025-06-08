@@ -163,7 +163,16 @@ void addPatient()
 
 //  ---------------------------------------Search Functions
 void searchPatientById()
+
 {
+
+    int confirm = inputInt("1. Search By ID\n2. <<<<<Go back\nEnter your choice: ");
+    if (confirm != 1)
+    {
+        printf("Returning to main menu.\n");
+        return;
+    }
+
     int id;
     id = inputInt("Enter Id of patient : ");
 
@@ -184,6 +193,13 @@ void searchPatientById()
 
 void searchPatientByName()
 {
+    printf("\n=== Search Patient ===\n");
+    int confirm = inputInt("1. Proceed to delete\n2. Go back\nEnter your choice: ");
+    if (confirm != 1)
+    {
+        printf("Returning to main menu.\n");
+        return;
+    }
 
     char name[50];
     int found = 0;
@@ -218,25 +234,29 @@ void searchPatientByName()
 
 void deletePatient()
 {
+    printf("\n=== Delete Patient ===\n");
+    int confirm = inputInt("1. Proceed to delete\n2. Go back\nEnter your choice: ");
+    if (confirm != 1)
+    {
+        printf("Returning to main menu.\n");
+        return;
+    }
 
     int id, found = 0;
-
-    id = inputInt("Enter ID:");
+    id = inputInt("Enter ID: ");
 
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
         {
-
             patients[i].status = PATIENT_DEACTIVE;
-            printf("Patient with ID %d  deleted successfully.\n", id);
+            printf("Patient with ID %d deleted successfully.\n", id);
             found = 1;
             savePatientsToFile();
         }
     }
     if (!found)
     {
-
         printf("Patient with ID %d not found.\n", id);
     }
 }
