@@ -307,7 +307,8 @@ void searchPatientByName()
                    patients[select_index].p_gender, patients[select_index].p_disease, patients[select_index].p_contact_num);
             printf("---------------------------------------------------------------------------------------------\n");
         }
-        else
+        else if (matchCount > 1)
+
         {
             printf("\nMultiple patients found with matching name:\n");
             printf("---------------------------------------------------------------------------------------------\n");
@@ -334,6 +335,7 @@ void searchPatientByName()
         }
 
         // Action Menu Loop
+        
         int action_choice;
         do
         {
@@ -731,7 +733,7 @@ void updatePatientByName()
 // SECONDARY FUNCTIONS
 
 // --------------------------------------------Display Patients
-void displayPatient()
+void displayActivePatient()
 {
 
     FILE *file = fopen("./data/patient.dat", "rb");
@@ -746,15 +748,68 @@ void displayPatient()
     {
         if (patients[i].status == PATIENT_ACTIVE)
         {
-
+            time_t currentTime = time(NULL);
             char reg_time_str[25];
-            struct tm *tm_info = localtime(&patients[i].registration_time);
-            strftime(reg_time_str, sizeof(reg_time_str), "%H:%M:%S %d/%m/%Y", tm_info);
+            formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
+            
+        printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
+                   patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
+                   patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
+        }
+    }
+
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    if (patient_counter == 0)
+        printf("No patient records found.\n");
+}
+
+
+void displayDeactivePatient(){
+
+    FILE*file = fopen("./data/patient.dat", "rb");
+    fileCheck(file);
+
+    printf("\n List of Deactive Patients:\n");
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |%-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact", "Registration D&T");
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (patients[i].status == PATIENT_DEACTIVE)
+        {
+            char reg_time_str[25];
+            time_t currentTime = time(NULL);
+            formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
 
             printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
                    patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
                    patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
         }
+    }
+
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    if (patient_counter == 0)
+        printf("No patient records found.\n");
+}
+
+
+void displayAllPatient(){
+    FILE *file = fopen("./data/patient.dat", "rb");
+    fileCheck(file);
+
+    printf("\n List of All Patients:\n");
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s |%-15s |\n", "ID", "Name", "Age", "Gender", "Disease", "Contact", "Registration D&T");
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    for (int i = 0; i < patient_counter; i++)
+    {
+        char reg_time_str[25];
+        time_t current_time = time(NULL);
+        formatRegistrationTime(current_time, reg_time_str, sizeof(reg_time_str));
+
+        printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
+               patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
+               patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
     }
 
     printf("-------------------------------------------------------------------------------------------------------\n");
@@ -777,7 +832,36 @@ void savePatientsToFile()
 
     fclose(file);
 }
+void displayPatient()
+{
+    int choice;
+    do
+    {
+        printf("\n=== Display Patients ===\n");
+        printf("1. Display Active Patients\n");
+        printf("2. Display Deactive Patients\n");
+        printf("3. Display All Patients\n");
+        printf("4. Go Back\n");
+        choice = inputInt("Enter your choice: ");
 
+        switch (choice)
+        {
+        case 1:
+            displayActivePatient();
+            break;
+        case 2:
+            displayDeactivePatient();
+            break;
+        case 3:
+            displayAllPatient();
+            break;
+        case 4:
+            return; // Go back to the main menu
+        default:
+            printf("Invalid choice! Please enter a number between 1 and 4.\n");
+        }
+    } while (choice != 4);
+}
 // ----------------------------------------Display Menu Function
 void displayPatientMenu(void)
 {

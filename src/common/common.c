@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <time.h>
 #include "src/patient/patient.h"
 #include "src/common/common.h"
 #include "src/doctor/doctor.h"
@@ -61,6 +62,25 @@ void exitProgram(void)
     printf("\n All patient data saved successfully!\n");
     printf("Thank you for using the Patient Management System. Goodbye!\n");
     exit(0); // Actually exit the program
+}
+
+void formatRegistrationTime(time_t registration_time, char *buffer, size_t bufferSize)
+{
+
+                                                            // First you have to create
+                                                            //  time_t currentTime = time(NULL);
+                                                            // char reg_time_str[25];
+
+                                                            // then call this function
+                                                            // formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
+
+    if (buffer == NULL || bufferSize == 0)
+    {
+        printf("Invalid buffer provided in formatRegistrationTime\n");
+        return; // Invalid buffer
+    }
+    struct tm *tm_info = localtime(&registration_time); 
+    strftime(buffer, bufferSize, "%H:%M:%S %d/%m/%Y", tm_info);
 }
 
 int inputInt(const char *prompt)

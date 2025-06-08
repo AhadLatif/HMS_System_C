@@ -40,6 +40,9 @@ void updatePatientByName();
 
 // Screen Functions
 
+void displayActivePatient();
+void displayDeactivePatient();
+void displayAllPatient();
 void displayPatient();
 void displayPatientMenu(void);
 
