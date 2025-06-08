@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <stdlib.h>
+#include <time.h>
 #include "src/patient/patient.h"
 #include "src/common/common.h"
 #include "src/doctor/doctor.h"
@@ -96,6 +97,25 @@ void exitProgram(void)
     exit(0); // Actually exit the program
 }
 
+void formatRegistrationTime(time_t registration_time, char *buffer, size_t bufferSize)
+{
+
+                                                            // First you have to create
+                                                            //  time_t currentTime = time(NULL);
+                                                            // char reg_time_str[25];
+
+                                                            // then call this function
+                                                            // formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
+
+    if (buffer == NULL || bufferSize == 0)
+    {
+        printf("Invalid buffer provided in formatRegistrationTime\n");
+        return; // Invalid buffer
+    }
+    struct tm *tm_info = localtime(&registration_time); 
+    strftime(buffer, bufferSize, "%H:%M:%S %d/%m/%Y", tm_info);
+}
+
 int inputInt(const char *prompt)
 {
     char buffer[100];
@@ -105,30 +125,24 @@ int inputInt(const char *prompt)
     {
         printf("%s", prompt);
 
-        // Get input as a string
-        if (fgets(buffer, sizeof(buffer), stdin) != NULL)
+        if (fgets(buffer, sizeof(buffer), stdin) == NULL)
         {
-            // Remove newline character if present
-            size_t len = strlen(buffer);
-            if (len > 0 && buffer[len - 1] == '\n')
-            {
-                buffer[len - 1] = '\0';
-            }
+            printf("Error reading input.\n");
+            continue;
+        }
 
-            // Try to parse as integer
-            char extra;
-            if (sscanf(buffer, "%d %c", &value, &extra) == 1)
-            {
-                return value;
-            }
-            else
-            {
-                printf("Invalid input. Please enter an integer.\n");
-            }
+        // Trim trailing newline if present
+        buffer[strcspn(buffer, "\n")] = '\0';
+
+        // Check if input is a valid integer (and only integer)
+        char extra;
+        if (sscanf(buffer, " %d %c", &value, &extra) == 1)
+        {
+            return value;
         }
         else
         {
-            printf(" Error reading input.\n");
+            printf("❌ Invalid input. Please enter a valid integer.\n");
         }
     }
 }
