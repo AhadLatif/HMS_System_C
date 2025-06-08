@@ -1,9 +1,9 @@
-<<<<<<< HEAD
 # Build artifacts
 *.exe
 *.out
 *.o
 *.obj
+hms.exe
 
 # Logs and temporary files
 *.log
@@ -21,7 +21,3 @@ Thumbs.db
 # Ignore binary data files if not essential
 /data/*.dat
 !data/meta.dat   # keep meta.dat if you want to track it for ID management
-=======
-hms.exe
-main.c
->>>>>>> Patient-Module-18-05-2025
