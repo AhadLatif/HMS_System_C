@@ -22,8 +22,6 @@ typedef struct
     int assigned_d_id;
     time_t registration_time;
     PatientStatus status;
-    // int p_admission_d[20];
-    // char p_status[20];
 } Patient;
 
 extern Patient patients[MAX_PATIENTS];
