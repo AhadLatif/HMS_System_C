@@ -104,17 +104,20 @@ void addPatient()
 {
     char choice[10];
     int sub_choice;
-    sub_choice = inputInt("Want to : \n1.Add patient \n2.t<<<<Go Back\n\nConfirm by Choice:");
-    while (sub_choice != 1 && sub_choice != 2)
+    do
     {
-        printf("Choose Correct Option: ");
-    }
+        sub_choice = inputInt("Want to : \n1.Add patient \n2.<<<<Go Back\n\nConfirm by Choice:");
+        if (sub_choice != 1 && sub_choice != 2)
+        {
+            printf("Choose Correct Option: ");
+        }
+    } while (sub_choice != 1 && sub_choice != 2);
 
     if (sub_choice == 1)
     {
         do
         {
-            if (patient_counter > MAX_PATIENTS)
+            if (patient_counter >= MAX_PATIENTS)
             {
                 printf("List is full\n");
                 return;
@@ -292,16 +295,27 @@ void searchPatientByName()
 
     int select_index = -1;
 
-    while (1) {
-        if (matchCount == 1) {
+    while (1)
+    {
+        if (matchCount == 1)
+        {
             select_index = matches[0];
-        } else {
+            printf(" %-5s | %-5s | %-20s | %-3s | %-10s | %-15s | %-15s \n",
+                   "No.", "ID", "Name", "Age", "Gender", "Disease", "Contact");
+            printf(" %-5d | %-5d | %-20s | %-3d | %-10s | %-15s | %-15s \n",
+                   1, patients[select_index].p_id, patients[select_index].p_name, patients[select_index].p_age,
+                   patients[select_index].p_gender, patients[select_index].p_disease, patients[select_index].p_contact_num);
+            printf("---------------------------------------------------------------------------------------------\n");
+        }
+        else
+        {
             printf("\nMultiple patients found with matching name:\n");
             printf("---------------------------------------------------------------------------------------------\n");
             printf(" %-5s | %-5s | %-20s | %-3s | %-10s | %-15s | %-15s \n",
                    "No.", "ID", "Name", "Age", "Gender", "Disease", "Contact");
 
-            for (int i = 0; i < matchCount; i++) {
+            for (int i = 0; i < matchCount; i++)
+            {
                 int idx = matches[i];
                 printf(" %-5d | %-5d | %-20s | %-3d | %-10s | %-15s | %-15s \n",
                        i + 1, patients[idx].p_id, patients[idx].p_name, patients[idx].p_age,
@@ -310,7 +324,8 @@ void searchPatientByName()
             printf("---------------------------------------------------------------------------------------------\n");
 
             int choice;
-            do {
+            do
+            {
                 printf("Select the number of the patient you want to (1-%d): \n", matchCount);
                 choice = inputInt("");
             } while (choice < 1 || choice > matchCount);
@@ -320,7 +335,8 @@ void searchPatientByName()
 
         // Action Menu Loop
         int action_choice;
-        do {
+        do
+        {
             printf("\nWhat do you want to do next for patient %s (ID: %d)?\n",
                    patients[select_index].p_name, patients[select_index].p_id);
             printf("1. Add new visit\n");
@@ -330,16 +346,20 @@ void searchPatientByName()
 
             action_choice = inputInt("Enter your choice: ");
 
-            switch (action_choice) {
-            case 1: {
+            switch (action_choice)
+            {
+            case 1:
+            {
                 char option[10];
-                do {
+                do
+                {
                     addVisitLog(patients[select_index].p_id);
                     printf("Do you want to add another visit for %s (ID: %d)? (Y/N): ",
                            patients[select_index].p_name, patients[select_index].p_id);
                     inputString(option, sizeof(option));
                     while (!(strcasecmp(option, "y") == 0 || strcasecmp(option, "yes") == 0 ||
-                             strcasecmp(option, "n") == 0 || strcasecmp(option, "no") == 0)) {
+                             strcasecmp(option, "n") == 0 || strcasecmp(option, "no") == 0))
+                    {
                         printf("Please choose correct option (Y/N): ");
                         inputString(option, sizeof(option));
                     }
@@ -350,22 +370,24 @@ void searchPatientByName()
                 displayVisitHistory(patients[select_index].p_id);
                 break;
             case 3:
-                // Go back to patient selection 
+                // Go back to patient selection
                 break;
             case 4:
-                // Go back to search menu 
+                // Go back to search menu
                 return;
             default:
                 printf("Invalid choice! Please enter a valid option.\n");
             }
         } while (action_choice != 3 && action_choice != 4);
 
-        if (action_choice == 4) {
+        if (action_choice == 4)
+        {
             // Go back to search menu
             return;
         }
         // If action_choice == 3, loop back to patient selection
-        if (matchCount == 1) {
+        if (matchCount == 1)
+        {
             // If only one match after action
             // return to search menu
             return;
@@ -378,7 +400,15 @@ void searchPatientByName()
 void deletePatient()
 {
     printf("\n=== Delete Patient ===\n");
-    int confirm = inputInt("1. Proceed to delete\n2. Go back\nEnter your choice: ");
+    int confirm;
+    do
+    {
+        confirm = inputInt("1. Proceed to delete\n2. Go back\nEnter your choice: ");
+        if (confirm != 1 && confirm != 2)
+        {
+            printf("Choose Correct Option: \n");
+        }
+    } while (confirm != 1 && confirm != 2);
     if (confirm != 1)
     {
         printf("Returning to main menu.\n");

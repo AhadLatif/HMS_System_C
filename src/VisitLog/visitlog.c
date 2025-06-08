@@ -71,18 +71,17 @@ void loadVisitLogs()
 {
     visit_log_counter = 0;
     FILE *fp = fopen("./data/visitlog.dat", "rb");
-
-    fileCheck(fp);
-
+    if (!fp)
+    {
+        printf("[ERROR] Could not open visitlog.dat for reading. Please ensure the file exists and is accessible.\n");
+        return;
+    }
     while (fread(&visit_logs[visit_log_counter], sizeof(VisitLog), 1, fp) != 0)
     {
         visit_log_counter++;
     }
-
     fclose(fp);
 }
-
-
 
 void saveVisitLog(VisitLog log)
 {
@@ -92,7 +91,11 @@ void saveVisitLog(VisitLog log)
         return;
     }
     FILE *file = fopen("./data/visitlog.dat", "ab");
-    fileCheck(file);
+    if (!file)
+    {
+        printf("[ERROR] Could not open visitlog.dat for writing. Please ensure the file is accessible.\n");
+        return;
+    }
     fwrite(&log, sizeof(VisitLog), 1, file);
     fclose(file);
     visit_logs[visit_log_counter++] = log; // Store in memory
