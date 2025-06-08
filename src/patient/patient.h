@@ -20,6 +20,7 @@ typedef struct
     char p_gender[10];
     char p_disease[50];
     int assigned_d_id;
+    time_t registration_time;
     PatientStatus status;
     // int p_admission_d[20];
     // char p_status[20];
