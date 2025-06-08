@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
@@ -34,18 +33,15 @@ void patientModule()
             break;
         case 3:
         {
-
             int search_choice;
             printf("Search Patient by:\n1. ID\n2. Name\n3.<<<<<Go Back\n");
             search_choice = inputInt("Enter choice: ");
             while (search_choice != 1 && search_choice != 2 && search_choice != 3)
             {
-
                 printf("Please choose correct option!");
                 printf("1. ID\n2. Name\n3.<<<<<Go Back\n");
                 search_choice = inputInt("Enter choice: ");
             }
-
             if (search_choice == 1)
                 searchPatientById();
             else if (search_choice == 2)
@@ -58,19 +54,15 @@ void patientModule()
         break;
         case 4:
         {
-
             int choice;
-
             printf("\nUpdate Patient by:\n1. ID\n2. Name\n3.<<<<<Go Back\n");
             choice = inputInt("Enter choice: ");
             while (choice != 1 && choice != 2 && choice != 3)
             {
-
                 printf("Please choose correct option!");
                 printf("1. ID\n2. Name\n3.<<<<<Go Back\n");
                 choice = inputInt("Enter choice: ");
             }
-
             if (choice == 1)
                 updatePatientById();
             else if (choice == 2)
@@ -84,13 +76,9 @@ void patientModule()
         case 5:
             deletePatient();
             break;
-
         case 6:
             exitProgram();
-        case 5:
-            mainFunction();
             break;
-            // return 0;
         default:
             printf("Invalid choice! Please enter a number between 1 and 5.\n");
         }
@@ -137,13 +125,6 @@ void addPatient()
                     return;
                 }
             }
-        for (int i = 0; i < patient_counter; i++)
-        {
-            if (patients[i].p_id == new_patient.p_id && patients[i].status == PATIENT_ACTIVE)
-            {
-                printf("ID %d already exists", new_patient.p_id);
-            }
-        }
 
             printf("\nEnter name: ");
             inputString(new_patient.p_name, sizeof(new_patient.p_name));
@@ -160,24 +141,13 @@ void addPatient()
             inputString(new_patient.p_contact_num, sizeof(new_patient.p_contact_num));
 
             new_patient.registration_time = time(NULL);
-
             new_patient.status = PATIENT_ACTIVE;
 
             patients[patient_counter++] = new_patient;
             savePatientsToFile();
-
             id_manager.next_patient_id++;
-
             saveIDManager();
             printf("Patient Entered Successfully!\n");
-        printf("Enter contact number: ");
-        inputString(new_patient.p_contact_num, sizeof(new_patient.p_contact_num));
-        new_patient.status = PATIENT_ACTIVE;
-        patients[patient_counter++] = new_patient;
-        savePatientsToFile();
-        id_manager.next_patient_id++;
-        saveIDManager();
-        printf("Patient Entered Successfully!\n");
 
             printf("Do you want to add another patient (Y/N)? ");
             inputString(choice, sizeof(choice));
@@ -211,22 +181,22 @@ void searchPatientById()
     for (i = 0; i < patient_counter; i++)
     {
         if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
-        if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
-        {
+            if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
+            {
 
-            char reg_time_str[25];
-            struct tm *tm_info = localtime(&patients[i].registration_time);
-            strftime(reg_time_str, sizeof(reg_time_str), "%H:%M:%S %d/%m/%Y", tm_info);
+                char reg_time_str[25];
+                struct tm *tm_info = localtime(&patients[i].registration_time);
+                strftime(reg_time_str, sizeof(reg_time_str), "%H:%M:%S %d/%m/%Y", tm_info);
 
-            printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
-                   patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
-                   patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
+                printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
+                       patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
+                       patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
 
-            found = 1;
-            printf("-------------------------------------------------------------------------------------------------------\n");
+                found = 1;
+                printf("-------------------------------------------------------------------------------------------------------\n");
 
-            break;
-        }
+                break;
+            }
     }
     if (!found)
     {
@@ -317,7 +287,6 @@ void searchPatientByName()
     while (1)
     {
         if (matchCount == 1)
-        if (strncasecmp(patients[i].p_name, name, strlen(name)) == 0 && patients[i].status == PATIENT_ACTIVE)
         {
             select_index = matches[0];
             printf(" %-5s | %-5s | %-20s | %-3s | %-10s | %-15s | %-15s \n",
@@ -327,8 +296,7 @@ void searchPatientByName()
                    patients[select_index].p_gender, patients[select_index].p_disease, patients[select_index].p_contact_num);
             printf("---------------------------------------------------------------------------------------------\n");
         }
-        else if (matchCount > 1)
-
+        else
         {
             printf("\nMultiple patients found with matching name:\n");
             printf("---------------------------------------------------------------------------------------------\n");
@@ -355,7 +323,7 @@ void searchPatientByName()
         }
 
         // Action Menu Loop
-        
+
         int action_choice;
         do
         {
@@ -443,23 +411,23 @@ void deletePatient()
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
-        if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
-        {
-
-            printf("\n1. Really want to delete \n\nID: %d \nName : %s\n\n", patients[i].p_id, patients[i].p_name);
-            int confirm2 = inputInt("2. Go back\nEnter your choice: ");
-            if (confirm2 != 1)
+            if (patients[i].p_id == id && patients[i].status == PATIENT_ACTIVE)
             {
-                printf("Returning to main menu.\n");
-                return;
+
+                printf("\n1. Really want to delete \n\nID: %d \nName : %s\n\n", patients[i].p_id, patients[i].p_name);
+                int confirm2 = inputInt("2. Go back\nEnter your choice: ");
+                if (confirm2 != 1)
+                {
+                    printf("Returning to main menu.\n");
+                    return;
+                }
+                patients[i].status = PATIENT_DEACTIVE;
+                printf("Patient with ID %d deleted successfully.\n", id);
+                patients[i].status = PATIENT_DEACTIVE;
+                printf("Patient with ID %d  deleted successfully.\n", id);
+                found = 1;
+                savePatientsToFile();
             }
-            patients[i].status = PATIENT_DEACTIVE;
-            printf("Patient with ID %d deleted successfully.\n", id);
-            patients[i].status = PATIENT_DEACTIVE;
-            printf("Patient with ID %d  deleted successfully.\n", id);
-            found = 1;
-            savePatientsToFile();
-        }
     }
     if (!found)
     {
@@ -770,16 +738,16 @@ void displayActivePatient()
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].status == PATIENT_ACTIVE)
-        if (patients[i].status == PATIENT_ACTIVE)
-        {
-            time_t currentTime = time(NULL);
-            char reg_time_str[25];
-            formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
-            
-        printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
-                   patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
-                   patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
-        }
+            if (patients[i].status == PATIENT_ACTIVE)
+            {
+                time_t currentTime = time(NULL);
+                char reg_time_str[25];
+                formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
+
+                printf("| %-5d | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s |\n",
+                       patients[i].p_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
+                       patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
+            }
     }
 
     printf("-------------------------------------------------------------------------------------------------------\n");
@@ -787,10 +755,10 @@ void displayActivePatient()
         printf("No patient records found.\n");
 }
 
+void displayDeactivePatient()
+{
 
-void displayDeactivePatient(){
-
-    FILE*file = fopen("./data/patient.dat", "rb");
+    FILE *file = fopen("./data/patient.dat", "rb");
     fileCheck(file);
 
     printf("\n List of Deactive Patients:\n");
@@ -816,8 +784,8 @@ void displayDeactivePatient(){
         printf("No patient records found.\n");
 }
 
-
-void displayAllPatient(){
+void displayAllPatient()
+{
     FILE *file = fopen("./data/patient.dat", "rb");
     fileCheck(file);
 

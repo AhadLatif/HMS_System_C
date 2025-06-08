@@ -1,26 +1,17 @@
-// <<<<<<< HEAD
-// =======
 #ifndef PATIENT_H
 #define PATIENT_H
 
+#include <time.h>
+
 #define MAX_PATIENTS 100
 
-<<<<<<< HEAD
 typedef enum
 {
-=======
-typedef enum{
-
->>>>>>> Patient-Module-18-05-2025
     PATIENT_ACTIVE,
     PATIENT_DEACTIVE,
     PATIENT_DISCHARGED,
     PATIENT_UNDER_DYGNOSIS
-<<<<<<< HEAD
-} patientStatus;
-=======
-}PatientStatus;
->>>>>>> Patient-Module-18-05-2025
+} PatientStatus;
 
 typedef struct
 {
@@ -31,20 +22,12 @@ typedef struct
     char p_gender[10];
     char p_disease[50];
     int assigned_d_id;
-<<<<<<< HEAD
-    patientStatus status;
-    // int p_admission_d[20];
-    // char p_status[20];
-=======
     time_t registration_time;
     PatientStatus status;
->>>>>>> Patient-Module-18-05-2025
 } Patient;
 
 extern Patient patients[MAX_PATIENTS];
 extern int patient_counter;
-
-// Functions
 
 // Core Functions
 void patientModule();
@@ -56,7 +39,6 @@ void updatePatientById();
 void updatePatientByName();
 
 // Screen Functions
-
 void displayActivePatient();
 void displayDeactivePatient();
 void displayAllPatient();
@@ -64,9 +46,7 @@ void displayPatient();
 void displayPatientMenu(void);
 
 // FileHandling Functions
-
 void savePatientsToFile();
 void loadPatientFromFile();
 
 #endif
-// >>>>>>> Patient-Module-18-05-2025
