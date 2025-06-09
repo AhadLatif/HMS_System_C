@@ -3,23 +3,27 @@
 
 #define MAX_PATIENTS 100
 
-typedef enum{
+typedef enum
+{
 
     PATIENT_ACTIVE,
     PATIENT_DEACTIVE,
     PATIENT_DISCHARGED,
-    PATIENT_UNDER_DYGNOSIS
-}PatientStatus;
+
+} PatientStatus;
 
 typedef struct
 {
+    char patient_id[16]; // Unique hospital ID (e.g., "P00001")
     char p_name[50];
     int p_age;
-    int p_id;
+    char p_cnic[15];        // Patient's CNIC (optional, not unique)
+    char guardian_cnic[15]; // Guardian's CNIC (optional, only for minors)
+    int is_minor;           // 1 if minor, 0 if adult
     char p_contact_num[15];
     char p_gender[10];
     char p_disease[50];
-    int assigned_d_id;
+    char p_blood_group[5];
     time_t registration_time;
     PatientStatus status;
 } Patient;
@@ -34,9 +38,12 @@ void patientModule();
 void addPatient();
 void searchPatientById();
 void searchPatientByName();
+void searchPatientByCnic();
 void deletePatient();
 void updatePatientById();
 void updatePatientByName();
+void updatePatientByCnic();
+void deletePatientByCnic();
 
 // Screen Functions
 
@@ -50,5 +57,8 @@ void displayPatientMenu(void);
 
 void savePatientsToFile();
 void loadPatientFromFile();
+
+// Others
+int inputValidatedDisease(char *disease, int size);
 
 #endif

@@ -1,4 +1,1 @@
-t > 1)
-
-        {
-            printf("\nMul
+snprintf(new_patient.patient_id, sizeof(new_patient.patient_id), "P%05d", patient_counter + 1);
