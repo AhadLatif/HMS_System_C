@@ -11,11 +11,11 @@
 VisitLog visit_logs[MAX_VISIT_LOGS]; // Array to hold visit logs
 int visit_log_counter = 0;
 
-void displayVisitHistory(int patient_id)
+void displayVisitHistory(char *patient_id)
 {
     loadVisitLogs(); // Load visit logs from file
 
-    printf("Visit History for Patient ID: %d\n", patient_id);
+    printf("Visit History for Patient ID: %s\n", patient_id);
     printf("-------------------------------------------------------------------------------------------------------\n");
     printf("| Visit ID | Patient ID | Assigned Doctor | Reason for Visit | Visit Time |\n");
     printf("-------------------------------------------------------------------------------------------------------\n");
@@ -23,13 +23,13 @@ void displayVisitHistory(int patient_id)
     int found = 0;
     for (int i = 0; i < visit_log_counter; i++)
     {
-        if (visit_logs[i].patient_id == patient_id)
+        if (strcmp(visit_logs[i].patient_id , patient_id)==0)
         {
             struct tm *tm_info = localtime(&visit_logs[i].visit_time);
             char visit_time_str[25];
             strftime(visit_time_str, sizeof(visit_time_str), "%H:%M:%S %d/%m/%Y", tm_info);
 
-            printf("| %-8d | %-11d | %-15s | %-17s | %-19s |\n",
+            printf("| %-8d | %-11s | %-15s | %-17s | %-19s |\n",
                    visit_logs[i].visit_id, visit_logs[i].patient_id,
                    visit_logs[i].assigned_doctor, visit_logs[i].reason, visit_time_str);
             found = 1;
@@ -38,13 +38,13 @@ void displayVisitHistory(int patient_id)
 
     if (!found)
     {
-        printf("No visit logs found for Patient ID: %d\n", patient_id);
+        printf("No visit logs found for Patient ID: %s\n", patient_id);
     }
 
     printf("-------------------------------------------------------------------------------------------------------\n");
 }
 
-void addVisitLog(int patient_id)
+void addVisitLog(char *patient_id)
 {
     if (visit_log_counter >= MAX_VISIT_LOGS)
     {
@@ -52,9 +52,10 @@ void addVisitLog(int patient_id)
         return;
     }
     VisitLog new_log;
+    strncpy(new_log.patient_id, patient_id, sizeof(new_log.patient_id) - 1);
+    new_log.patient_id[sizeof(new_log.patient_id) - 1] = '\0'; // Ensure null termination
     new_log.visit_id = getNextVisitID();
     // Unique ID for each visit
-    new_log.patient_id = patient_id;
 
     printf("Enter reason for visit: ");
     inputString(new_log.reason, sizeof(new_log.reason));
