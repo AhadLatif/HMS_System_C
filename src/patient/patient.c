@@ -218,10 +218,10 @@ void addPatient()
                 }
             }
 
-            // New Patient Flow (either first visit = yes, or returning patient not found who chose to register)
+            // new Patent Flow either first visit = yes, or returning patient not found who chose to register)
             Patient new_patient;
 
-            // Clear all fields
+            // to clear all fields in new patient struct
             memset(&new_patient, 0, sizeof(Patient));
 
             printf("\nNEW PATIENT REGISTRATION\n");
@@ -240,8 +240,8 @@ void addPatient()
             if (new_patient.p_age < 18)
             {
                 new_patient.is_minor = 1;
-                new_patient.p_cnic[0] = '\0';        // Clear minor's CNIC
-                new_patient.guardian_cnic[0] = '\0'; // Clear guardian's CNIC
+                new_patient.p_cnic[0] = '\0';
+                new_patient.guardian_cnic[0] = '\0';
 
                 char has_cnic[10];
                 do
@@ -289,9 +289,9 @@ void addPatient()
                            cnic_to_check, patients[i].p_name, patients[i].patient_id);
                     printf("Minor will be linked to this guardian.\n");
                     is_guardian_of_existing_adult = 1;
-                    // Don't break here, allow the registration to continue
+                    new_patient.guardian_cnic[0] = '\0';
                 }
-                // Regular CNIC conflict check (for same type of usage)
+                // Regular CNIC conflict check
                 else if ((strlen(patients[i].p_cnic) > 0 && strcmp(patients[i].p_cnic, cnic_to_check) == 0 &&
                           ((new_patient.is_minor && strlen(new_patient.p_cnic) > 0) || !new_patient.is_minor)) ||
                          (strlen(patients[i].guardian_cnic) > 0 && strcmp(patients[i].guardian_cnic, cnic_to_check) == 0 &&
@@ -309,18 +309,14 @@ void addPatient()
                 }
             }
 
-            // Skip normal conflict checks if this is a valid guardian relationship
-            if (is_guardian_of_existing_adult)
-            {
-                // Allow the registration - minor can use adult's CNIC as guardian
-            }
+            // If active patient found with same cnic, show error
 
             if (active_patient_index != -1 && !is_guardian_of_existing_adult)
             {
                 printf("CNIC %s is already assigned to active patient %s (ID: %s).\n",
                        cnic_to_check, patients[active_patient_index].p_name, patients[active_patient_index].patient_id);
                 printf("Cannot register. Patient already exists in system.\n");
-                continue; // Go back to main loop
+                continue;
             }
 
             if (deactive_patient_index != -1 && !is_guardian_of_existing_adult)
@@ -348,7 +344,7 @@ void addPatient()
                 int go_back_choice = inputInt("1. Go back to main menu\n2. Add new patient\nEnter your choice: ");
                 if (go_back_choice == 2)
                 {
-                    continue; // Go back to main loop
+                    continue;
                 }
                 else
                 {
@@ -412,11 +408,11 @@ void searchPatientById()
                    patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_blood_group,
                    patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
 
-                found = 1;
-                printf("-------------------------------------------------------------------------------------------------------\n");
+            found = 1;
+            printf("-------------------------------------------------------------------------------------------------------\n");
 
-                break;
-            }
+            break;
+        }
     }
     if (!found)
     {
