@@ -25,13 +25,14 @@ void displayVisitHistory(char *patient_id)
     {
         if (strcmp(visit_logs[i].patient_id , patient_id)==0)
         {
-            struct tm *tm_info = localtime(&visit_logs[i].visit_time);
-            char visit_time_str[25];
-            strftime(visit_time_str, sizeof(visit_time_str), "%H:%M:%S %d/%m/%Y", tm_info);
+
+            char reg_time_str[25];
+            time_t visit_time_str = time(NULL);
+            formatRegistrationTime(visit_logs[i].visit_time,reg_time_str, sizeof(reg_time_str));
 
             printf("| %-8d | %-11s | %-15s | %-17s | %-19s |\n",
                    visit_logs[i].visit_id, visit_logs[i].patient_id,
-                   visit_logs[i].assigned_doctor, visit_logs[i].reason, visit_time_str);
+                   visit_logs[i].assigned_doctor, visit_logs[i].reason, reg_time_str);
             found = 1;
         }
     }
@@ -42,6 +43,7 @@ void displayVisitHistory(char *patient_id)
     }
 
     printf("-------------------------------------------------------------------------------------------------------\n");
+    return;
 }
 
 void addVisitLog(char *patient_id)

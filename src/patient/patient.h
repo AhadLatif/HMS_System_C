@@ -40,6 +40,7 @@ void searchPatientById();
 void searchPatientByName();
 void searchPatientByCnic();
 void deletePatient();
+void updatePatient(int select_index);
 void updatePatientById();
 void updatePatientByName();
 void updatePatientByCnic();
