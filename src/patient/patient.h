@@ -40,6 +40,7 @@ void searchPatientById();
 void searchPatientByName();
 void searchPatientByCnic();
 void deletePatient();
+void updatePatient(int select_index);
 void updatePatientById();
 void updatePatientByName();
 void updatePatientByCnic();
@@ -57,7 +58,6 @@ void savePatientsToFile();
 void loadPatientFromFile();
 
 // Others
-void visitLogMenu(int patient_index);
 int inputValidatedDisease(char *disease, int size);
 
 #endif

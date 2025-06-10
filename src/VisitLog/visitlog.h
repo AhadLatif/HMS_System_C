@@ -31,4 +31,6 @@ void loadVisitLogs();
 void saveVisitLog(VisitLog log);
 void displayVisitHistory(char* patient_id);
 void addVisitLog(char* patient_id);
+void visitLogMenu(int patient_index);
+
 #endif
