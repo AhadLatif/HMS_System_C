@@ -60,7 +60,6 @@ void savePatientsToFile();
 void loadPatientFromFile();
 
 // Others
-void visitLogMenu(int patient_index);
 int inputValidatedDisease(char *disease, int size);
 
 #endif

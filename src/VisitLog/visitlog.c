@@ -23,12 +23,12 @@ void displayVisitHistory(char *patient_id)
     int found = 0;
     for (int i = 0; i < visit_log_counter; i++)
     {
-        if (strcmp(visit_logs[i].patient_id , patient_id)==0)
+        if (strcmp(visit_logs[i].patient_id, patient_id) == 0)
         {
 
             char reg_time_str[25];
             time_t visit_time_str = time(NULL);
-            formatRegistrationTime(visit_logs[i].visit_time,reg_time_str, sizeof(reg_time_str));
+            formatRegistrationTime(visit_logs[i].visit_time, reg_time_str, sizeof(reg_time_str));
 
             printf("| %-8d | %-11s | %-15s | %-17s | %-19s |\n",
                    visit_logs[i].visit_id, visit_logs[i].patient_id,
@@ -103,4 +103,70 @@ void saveVisitLog(VisitLog log)
     fclose(file);
     visit_logs[visit_log_counter++] = log; // Store in memory
     printf("Visit log added successfully.\n");
+}
+
+void visitLogMenu(int patient_index)
+{
+
+    printf("-------------------------------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Blood Group", "Gender", "Disease", "Contact", "Registration D&T");
+    for (int i = 0; i < patient_counter; i++)
+    {
+        if (strcmp(patients[i].patient_id, patients[patient_index].patient_id) == 0 && patients[i].status == PATIENT_ACTIVE)
+        {
+
+            char reg_time_str[25];
+            time_t currentTime = time(NULL);
+            formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
+
+            printf("| %-5s | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s | %-15s |\n",
+                   patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_blood_group,
+                   patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
+
+            printf("-------------------------------------------------------------------------------------------------------\n");
+
+            break;
+        }
+    }
+    do
+    {
+        int action_choice;
+        printf("\nWhat do you want to do next for patient %s (ID: %s)?\n", patients[patient_index].p_name, patients[patient_index].patient_id);
+        printf("1. Add new visit\n");
+        printf("2. Display visit history\n");
+        printf("3. Go back to search menu\n");
+        action_choice = inputInt("Enter your choice: ");
+        switch (action_choice)
+        {
+        case 1:
+        {
+            char option[10];
+            do
+            {
+                addVisitLog(patients[patient_index].patient_id);
+                printf("Visit Log Added Successfully!\n");
+                printf("Do you want to add another visit for %s (ID: %s)? (Y/N): ",
+                       patients[patient_index].p_name, patients[patient_index].patient_id);
+                inputString(option, sizeof(option));
+                while (!(strcasecmp(option, "y") == 0 || strcasecmp(option, "yes") == 0 ||
+                         strcasecmp(option, "n") == 0 || strcasecmp(option, "no") == 0))
+                {
+                    printf("Please choose correct option (Y/N): ");
+                    inputString(option, sizeof(option));
+                }
+            } while (strcasecmp(option, "y") == 0 || strcasecmp(option, "yes") == 0);
+            break;
+        }
+        case 2:
+            displayVisitHistory(patients[patient_index].patient_id);
+            break;
+        case 3:
+            printf("Returning to search menu.\n");
+            return;
+        default:
+            printf("Invalid choice! Please enter a valid option.\n");
+            continue;
+        }
+        break;
+    } while (1);
 }
