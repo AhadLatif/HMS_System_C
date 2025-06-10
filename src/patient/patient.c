@@ -8,16 +8,17 @@
 #include "src/common/common.h"
 #include "src/id_manager/id_manager.h"
 #include "src/VisitLog/visitlog.h"
-
 #include "patient.h"
 
 Patient patients[MAX_PATIENTS];
 int patient_counter = 0;
 
+// this is main patient module
 void patientModule()
 {
 
-    loadPatientFromFile();
+    loadPatientFromFile(); // Loading patient data and IDs from file when program starts
+
     loadIDManager();
 
     int choice;
@@ -112,6 +113,7 @@ void addPatient()
         }
     } while (sub_choice != 1 && sub_choice != 2);
 
+    // checking max patients limit
     if (sub_choice == 1)
     {
         do
@@ -152,7 +154,7 @@ void addPatient()
                         break;
                     }
                 }
-
+                // if not found ask him to register new patient
                 if (found_index == -1)
                 {
                     printf("Patient not found with CNIC: %s\n", search_cnic);
@@ -178,15 +180,16 @@ void addPatient()
                             continue;
                         }
                     }
-                    // If yes, continue to new patient registration below
                 }
+                // if found patient and active
                 else if (patient_status == PATIENT_ACTIVE)
                 {
                     printf("Welcome back, %s! (ID: %s)\n", patients[found_index].p_name, patients[found_index].patient_id);
                     printf("Patient is already active in the system.\n");
-                    visitLogMenu(found_index);
+                    visitLogMenu(found_index); // provide access to visit log
                     return;
                 }
+                // if find patient but deactivated, asks for activation
                 else if (patient_status == PATIENT_DEACTIVE)
                 {
                     char reactivate_choice[10];
@@ -209,16 +212,16 @@ void addPatient()
                     }
                     continue; // Go back to main loop
                 }
-                else if (patient_status == PATIENT_DISCHARGED)
-                {
-                    printf("Patient %s (ID: %s) has been discharged.\n",
-                           patients[found_index].p_name, patients[found_index].patient_id);
-                    printf("Please contact administration for further assistance.\n");
-                    continue; // Go back to main loop
-                }
+                // else if (patient_status == PATIENT_DISCHARGED)
+                // {
+                //     printf("Patient %s (ID: %s) has been discharged.\n",
+                //            patients[found_index].p_name, patients[found_index].patient_id);
+                //     printf("Please contact administration for further assistance.\n");
+                //     continue; // Go back to main loop
+                // }
             }
 
-            // new Patent Flow either first visit = yes, or returning patient not found who chose to register)
+            // if a first visit
             Patient new_patient;
 
             // to clear all fields in new patient struct
@@ -244,6 +247,7 @@ void addPatient()
                 new_patient.guardian_cnic[0] = '\0';
 
                 char has_cnic[10];
+                // asks if minor has CNIC or guardian CNIC and assign it accordingly
                 do
                 {
                     printf("Does the minor have a CNIC? (Y/N): ");
@@ -280,7 +284,9 @@ void addPatient()
 
             for (int i = 0; i < patient_counter; i++)
             {
-                // Special case: If minor is using guardian CNIC that belongs to an existing adult
+                // Special case: If the new patient is a minor using a guardian's CNIC,
+                // and if one of the existing patients is an adult (not a minor) whose CNIC matches the provided CNIC,
+                // then link the minor to the existing adult guardian.
                 if (new_patient.is_minor && strlen(new_patient.guardian_cnic) > 0 &&
                     !patients[i].is_minor && strlen(patients[i].p_cnic) > 0 &&
                     strcmp(patients[i].p_cnic, cnic_to_check) == 0)
@@ -292,18 +298,21 @@ void addPatient()
                     new_patient.guardian_cnic[0] = '\0';
                 }
                 // Regular CNIC conflict check
-                else if ((strlen(patients[i].p_cnic) > 0 && strcmp(patients[i].p_cnic, cnic_to_check) == 0 &&
-                          ((new_patient.is_minor && strlen(new_patient.p_cnic) > 0) || !new_patient.is_minor)) ||
-                         (strlen(patients[i].guardian_cnic) > 0 && strcmp(patients[i].guardian_cnic, cnic_to_check) == 0 &&
-                          new_patient.is_minor && strlen(new_patient.guardian_cnic) > 0))
+                else if (
+                    (strlen(patients[i].p_cnic) > 0 && strcmp(patients[i].p_cnic, cnic_to_check) == 0 && ((new_patient.is_minor && strlen(new_patient.p_cnic) > 0) || !new_patient.is_minor)) ||
+                    (strlen(patients[i].guardian_cnic) > 0 && strcmp(patients[i].guardian_cnic, cnic_to_check) == 0 && new_patient.is_minor && strlen(new_patient.guardian_cnic) > 0))
+
+
                 {
                     if (patients[i].status == PATIENT_ACTIVE)
                     {
+                        // If an active patient with the same CNIC is found, set the index
                         active_patient_index = i;
                         break;
                     }
                     else if (patients[i].status == PATIENT_DEACTIVE)
                     {
+                        // If a deactivated patient with the same CNIC is found, set the index
                         deactive_patient_index = i;
                     }
                 }
@@ -318,7 +327,7 @@ void addPatient()
                 printf("Cannot register. Patient already exists in system.\n");
                 continue;
             }
-
+            // If deactivated patient found with same cnic, ask to reactivate
             if (deactive_patient_index != -1 && !is_guardian_of_existing_adult)
             {
                 char reactivate_choice[10];
@@ -387,6 +396,7 @@ void searchPatientById()
         printf("Returning to main menu.\n");
         return;
     }
+
     int found = 0;
     int i;
     char id[20];
@@ -395,6 +405,7 @@ void searchPatientById()
 
     printf("-------------------------------------------------------------------------------------------------------\n");
     printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Blood Group", "Gender", "Disease", "Contact", "Registration D&T");
+    printf("-------------------------------------------------------------------------------------------------------\n");
     for (i = 0; i < patient_counter; i++)
     {
         if (strcmp(patients[i].patient_id, id) == 0 && patients[i].status == PATIENT_ACTIVE)
@@ -460,6 +471,7 @@ void searchPatientByName()
 
     while (1)
     {
+        // if find only one match
         if (matchCount == 1)
         {
             select_index = matches[0];
@@ -472,6 +484,7 @@ void searchPatientByName()
         }
         else
         {
+            // if found multiple matches ask user to select one
             printf("\nMultiple patients found with matching name:\n");
             printf("---------------------------------------------------------------------------------------------\n");
             printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n",
@@ -496,7 +509,7 @@ void searchPatientByName()
             select_index = matches[choice - 1];
         }
 
-        visitLogMenu(select_index);
+        visitLogMenu(select_index); // Provide access to visit log for the selected patient
     }
 }
 
@@ -536,6 +549,7 @@ void searchPatientByCnic()
     int select_index = -1;
     while (1)
     {
+        // If only one match found, display it directly
         if (matchCount == 1)
         {
             select_index = matches[0];
@@ -548,6 +562,7 @@ void searchPatientByCnic()
         }
         else if (matchCount > 1)
         {
+            // If multiple matches found, display them and ask user to select one
             printf("\nMultiple patients found with matching CNIC or Guardian CNIC:\n");
             printf("---------------------------------------------------------------------------------------------\n");
             printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n",
@@ -569,7 +584,7 @@ void searchPatientByCnic()
             select_index = matches[choice - 1];
         }
 
-        visitLogMenu(select_index);
+        visitLogMenu(select_index); // Provide access to visit log for the selected patient
     }
 }
 
@@ -590,7 +605,7 @@ void deletePatient()
     } while (choice != 1 && choice != 2 && choice != 3);
     if (choice == 1)
     {
-        // Existing delete by ID logic
+        // Existing delete by ID logic this will not delete permenantly, it will just deactivate the patient
         char id[20];
         printf("Enter ID: ");
         inputString(id, sizeof(id));
@@ -644,7 +659,7 @@ void updatePatientById()
     printf("\nEnter ID of patient: ");
     inputString(id, sizeof(id));
     int found = 0;
-
+    // matches each patient with given id if found then  update it
     for (int i = 0; i < patient_counter; i++)
     {
         if (strcmp(patients[i].patient_id, id) == 0 && patients[i].status == PATIENT_ACTIVE)
