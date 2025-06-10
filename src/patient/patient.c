@@ -302,7 +302,6 @@ void addPatient()
                     (strlen(patients[i].p_cnic) > 0 && strcmp(patients[i].p_cnic, cnic_to_check) == 0 && ((new_patient.is_minor && strlen(new_patient.p_cnic) > 0) || !new_patient.is_minor)) ||
                     (strlen(patients[i].guardian_cnic) > 0 && strcmp(patients[i].guardian_cnic, cnic_to_check) == 0 && new_patient.is_minor && strlen(new_patient.guardian_cnic) > 0))
 
-
                 {
                     if (patients[i].status == PATIENT_ACTIVE)
                     {
