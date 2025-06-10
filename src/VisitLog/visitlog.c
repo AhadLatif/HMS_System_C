@@ -27,7 +27,6 @@ void displayVisitHistory(char *patient_id)
         {
 
             char reg_time_str[25];
-            time_t visit_time_str = time(NULL);
             formatRegistrationTime(visit_logs[i].visit_time, reg_time_str, sizeof(reg_time_str));
 
             printf("| %-8d | %-11s | %-15s | %-17s | %-19s |\n",
