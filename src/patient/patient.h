@@ -16,17 +16,17 @@ typedef enum
 
 typedef struct
 {
+    int p_age;
+    int is_minor;           // 1 if minor, 0 if adult
+    time_t registration_time;
     char patient_id[16]; // Unique hospital ID (e.g., "P00001")
     char p_name[50];
-    int p_age;
-    char p_cnic[15];        // Patient's CNIC (optional, not unique)
-    char guardian_cnic[15]; // Guardian's CNIC (optional, only for minors)
-    int is_minor;           // 1 if minor, 0 if adult
+    char p_cnic[15];        
+    char guardian_cnic[15]; 
     char p_contact_num[15];
     char p_gender[10];
     char p_disease[50];
     char p_blood_group[5];
-    time_t registration_time;
     PatientStatus status;
 } Patient;
 
