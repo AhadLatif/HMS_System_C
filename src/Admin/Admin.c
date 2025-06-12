@@ -160,11 +160,9 @@ void saveADMINsToFile()
         if (fwrite(&ADMINs[i], sizeof(ADMIN), 1, file) != 1)
         {
             printf("Error writing ADMIN %d to file.\n", i + 1);
-            fclose(file);
         }
-
-        fclose(file);
     }
+    fclose(file);
 
     printf("ADMINs saved to file successfully.\n");
 }
