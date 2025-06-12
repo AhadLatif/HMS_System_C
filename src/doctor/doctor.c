@@ -645,9 +645,15 @@ void deleteDoctorByCnic()
 void loadDoctorsFromFile()
 {
     FILE *file = fopen("./data/doctor.dat", "rb");
+    if (!file)
+    {
+        printf("No existing doctor data file found. Starting with empty database.\n");
+        doctor_counter = 0;
+        return;
+    }
 
-    fileCheck(file);
-    while (fread(&doctors[doctor_counter], sizeof(Doctor), 1, file) != 0)
+    doctor_counter = 0; // Reset counter before loading
+    while (fread(&doctors[doctor_counter], sizeof(Doctor), 1, file) != 0 && doctor_counter < MAX_DOCTORS)
     {
         doctor_counter++;
     }
@@ -657,14 +663,48 @@ void loadDoctorsFromFile()
 void saveDoctorsToFile()
 {
     FILE *file = fopen("./data/doctor.dat", "wb");
+    if (!file)
+    {
+        printf("Error: Could not open doctor.dat for writing\n");
+        return;
+    }
 
     for (int i = 0; i < doctor_counter; i++)
     {
-        fwrite(&doctors[i], sizeof(Doctor), 1, file);
+        if (fwrite(&doctors[i], sizeof(Doctor), 1, file) != 1)
+        {
+            printf("Error: Failed to write doctor data to file\n");
+            fclose(file);
+            return;
+        }
+    }
+    fclose(file);
+
+    FILE *file2 = fopen("./data/doctor.csv", "w");
+    if (!file2)
+    {
+        printf("Error: Could not open doctor.csv for writing\n");
+        return;
     }
 
-    fclose(file);
+    fprintf(file2, "ID,Name,Age,Gender,Specialization,Phone,CNIC,RegistrationTime,Status\n");
+
+    for (int i = 0; i < doctor_counter; i++)
+    {
+        fprintf(file2, "%s,%s,%d,%s,%s,\"%s\",\"%s\",%lld,%d\n",
+                doctors[i].d_id,
+                doctors[i].d_name,
+                doctors[i].d_age,
+                doctors[i].d_gender,
+                doctors[i].d_specialization,
+                doctors[i].d_phone,
+                doctors[i].d_cnic,
+                doctors[i].registration_time,
+                doctors[i].status);
+    }
+    fclose(file2);
 }
+
 // Others
 
 void displayDoctorMenu()

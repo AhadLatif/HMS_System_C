@@ -959,16 +959,51 @@ void displayAllPatient()
 
 void savePatientsToFile()
 {
-
     FILE *file = fopen("./data/patient.dat", "wb");
-    fileCheck(file);
+    if (!file)
+    {
+        printf("Error: Could not open patient.dat for writing\n");
+        return;
+    }
 
     for (int i = 0; i < patient_counter; i++)
     {
-        fwrite(&patients[i], sizeof(Patient), 1, file);
+        if (fwrite(&patients[i], sizeof(Patient), 1, file) != 1)
+        {
+            printf("Error: Failed to write patient data to file\n");
+            fclose(file);
+            return;
+        }
+    }
+    fclose(file);
+
+    // Also save to CSV for backup/export
+    FILE *file2 = fopen("./data/patient.csv", "w");
+    if (!file2)
+    {
+        printf("Error: Could not open patient.csv for writing\n");
+        return;
     }
 
-    fclose(file);
+    fprintf(file2, "ID,Name,Age,Gender,Disease,Contact,CNIC,GuardianCNIC,BloodGroup,IsMinor,RegistrationTime,Status\n");
+
+    for (int i = 0; i < patient_counter; i++)
+    {
+        fprintf(file2, "%s,%s,%d,%s,%s,\"%s\",\"%s\",\"%s\",%s,%d,%lld,%d\n",
+                patients[i].patient_id,
+                patients[i].p_name,
+                patients[i].p_age,
+                patients[i].p_gender,
+                patients[i].p_disease,
+                patients[i].p_contact_num,
+                patients[i].p_cnic,
+                patients[i].guardian_cnic,
+                patients[i].p_blood_group,
+                patients[i].is_minor,
+                patients[i].registration_time,
+                patients[i].status);
+    }
+    fclose(file2);
 }
 void displayPatient()
 {
@@ -1015,18 +1050,20 @@ void displayPatientMenu(void)
 
 //---------------------------------------------Load Patient
 void loadPatientFromFile(void)
-
 {
-
     FILE *fp = fopen("./data/patient.dat", "rb");
+    if (!fp)
+    {
+        printf("No existing patient data file found. Starting with empty database.\n");
+        patient_counter = 0;
+        return;
+    }
 
-    fileCheck(fp);
-
-    while (fread(&patients[patient_counter], sizeof(Patient), 1, fp) != 0)
+    patient_counter = 0; // Reset counter before loading
+    while (fread(&patients[patient_counter], sizeof(Patient), 1, fp) != 0 && patient_counter < MAX_PATIENTS)
     {
         patient_counter++;
     }
-
     fclose(fp);
 }
 
