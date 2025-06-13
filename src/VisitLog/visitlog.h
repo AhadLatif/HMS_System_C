@@ -7,7 +7,7 @@
 typedef struct
 {
     int visit_id;         // Unique for each visit
-    int patient_id;       // Refers to patient in patient.dat
+    char patient_id[16];       // Refers to patient in patient.dat
     int doctor_id;        // Refers to doctor in doctor.dat
     char reason[100];     // Reason for visit
     char assigned_doctor[50]; // Name of the doctor assigned
@@ -29,6 +29,8 @@ typedef struct {
 // Function declarations
 void loadVisitLogs();
 void saveVisitLog(VisitLog log);
-void displayVisitHistory(int patient_id);
-void addVisitLog(int patient_id);
+void displayVisitHistory(char* patient_id);
+void addVisitLog(char* patient_id);
+void visitLogMenu(int patient_index);
+
 #endif
