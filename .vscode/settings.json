@@ -13,6 +13,7 @@
   "files.associations": {
     "patient.h": "c",
     "id_manager.h": "c",
-    "common.h": "c"
+    "common.h": "c",
+    "billing.h": "c"
   }
 }

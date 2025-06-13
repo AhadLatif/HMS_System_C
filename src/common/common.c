@@ -13,20 +13,20 @@
 
 void mainFunction()
 {
-    int selection;
-    printf("Select an option:\n");
-    printf("1. Doctor Module\n");
-    printf("2. Patient Module\n");
-    printf("3. Exit Program \n");
-    printf("Enter your choice: ");
-    if (scanf("%d", &selection) != 1)
-    {
-        printf("Invalid input. Exiting.\n");
-        exit(EXIT_FAILURE);
-    }
 
-    
-    
+    int selection;
+    do
+    {
+
+        printf("Select an option:\n");
+        printf("1. Doctor Module\n");
+        printf("2. Patient Module\n");
+        printf("3. Exit Program \n");
+        printf("Enter your choice: ");
+        selection = inputInt("Choose ");
+
+    } while (selection != 1 && selection != 2 && selection != 3);
+
     switch (selection)
     {
 
@@ -141,7 +141,7 @@ int inputInt(const char *prompt)
         }
         else
         {
-            printf("❌Invalid input. Please enter a valid integer.\n");
+            printf("Invalid input. Please enter a valid integer.\n");
         }
     }
 }

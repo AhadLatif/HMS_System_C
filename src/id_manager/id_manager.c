@@ -21,7 +21,7 @@ void loadIDManager()
     }
     else
     {
-        id_manager.next_bill_id = 1;
+        id_manager.next_admin_id = 1;
         id_manager.next_doctor_id = 1;
         id_manager.next_patient_id = 1;
         id_manager.next_visit_id = 1;
