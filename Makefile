@@ -1,7 +1,7 @@
 # Makefile for Hospital Management System
 
 CC     = gcc
-CFLAGS = -I. -Isrc -Isrc/patient -Isrc/doctor -Isrc/billing -Isrc/id_manager -Isrc/common -Isrc/VisitLog -Wall -Wextra
+CFLAGS = -I. -Isrc -Isrc/patient -Isrc/doctor -Isrc/billing -Isrc/id_manager -Isrc/common -Isrc/VisitLog -Isrc/Admin -Wall -Wextra
 SRC    = main.c \
          src/patient/patient.c \
          src/doctor/doctor.c \
@@ -9,6 +9,7 @@ SRC    = main.c \
          src/id_manager/id_manager.c \
          src/common/common.c\
          src/VisitLog/visitlog.c \
+		 src/Admin/Admin.c \
 OBJ    = $(SRC:.c=.o)
 TARGET = hms.exe
 
