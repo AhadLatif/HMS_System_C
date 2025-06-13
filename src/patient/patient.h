@@ -7,22 +7,26 @@
 
 typedef enum
 {
+
     PATIENT_ACTIVE,
     PATIENT_DEACTIVE,
     PATIENT_DISCHARGED,
-    PATIENT_UNDER_DYGNOSIS
+
 } PatientStatus;
 
 typedef struct
 {
-    char p_name[50];
     int p_age;
-    int p_id;
+    int is_minor;           // 1 if minor, 0 if adult
+    time_t registration_time;
+    char patient_id[16]; // Unique hospital ID (e.g., "P00001")
+    char p_name[50];
+    char p_cnic[15];        
+    char guardian_cnic[15]; 
     char p_contact_num[15];
     char p_gender[10];
     char p_disease[50];
-    int assigned_d_id;
-    time_t registration_time;
+    char p_blood_group[5];
     PatientStatus status;
 } Patient;
 
@@ -34,9 +38,13 @@ void patientModule();
 void addPatient();
 void searchPatientById();
 void searchPatientByName();
+void searchPatientByCnic();
 void deletePatient();
+void updatePatient(int select_index);
 void updatePatientById();
 void updatePatientByName();
+void updatePatientByCnic();
+void deletePatientByCnic();
 
 // Screen Functions
 void displayActivePatient();
@@ -48,5 +56,8 @@ void displayPatientMenu(void);
 // FileHandling Functions
 void savePatientsToFile();
 void loadPatientFromFile();
+
+// Others
+int inputValidatedDisease(char *disease, int size);
 
 #endif
