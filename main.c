@@ -12,7 +12,7 @@ int main()
 {
 
     welcomScreen();
-    ADMINModule();
+    adminModule();
 
     return 0;
 }

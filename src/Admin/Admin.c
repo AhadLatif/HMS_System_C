@@ -6,11 +6,13 @@
 #include "../id_manager/id_manager.h"
 #include <time.h>
 #include "Admin.h"
-ADMIN ADMINs[MAX_ADMINS];
-int ADMIN_counter = 0;
-void ADMINModule()
+
+Admin admins[MAX_ADMINS];
+int admin_counter = 0;
+
+void adminModule()
 {
-    loadADMINsFromFile();
+    loadAdminsFromFile();
     // loadIDManagerFromFile();
     int option;
     printf("Select an option:\n");
@@ -21,17 +23,17 @@ void ADMINModule()
 
     if (option == 1)
     {
-        addADMIN();
+        addAdmin();
     }
     else if (option == 2)
     {
-        searchADMINByCnic();
+        searchAdminByCnic();
     }
-    else if(option ==3 )
+    else if (option == 3)
     {
         exitProgram();
     }
-    
+
     else
     {
         printf("Invalid choice. Please try again.\n");
@@ -40,22 +42,22 @@ void ADMINModule()
 
 // Add ADMIN
 // ...existing code...
-void addADMIN()
+void addAdmin()
 {
-    ADMIN new_admin;
-    inputValidatedName(new_admin.d_name, sizeof(new_admin.d_name));
+    Admin new_admin;
+    inputValidatedName(new_admin.a_name, sizeof(new_admin.a_name));
 
     int unique = 0;
     while (!unique)
     {
-        inputValidatedCNIC(new_admin.d_cnic, sizeof(new_admin.d_cnic));
+        inputValidatedCNIC(new_admin.a_cnic, sizeof(new_admin.a_cnic));
         int found = 0;
-        for (int i = 0; i < ADMIN_counter; i++)
+        for (int i = 0; i < admin_counter; i++)
         {
-            if (strcmp(ADMINs[i].d_cnic, new_admin.d_cnic) == 0)
+            if (strcmp(admins[i].a_cnic, new_admin.a_cnic) == 0)
             {
                 found = 1;
-                printf("This CNIC is already assigned to admin: %s (ID: %s)\n", ADMINs[i].d_name, ADMINs[i].d_id);
+                printf("This CNIC is already assigned to admin: %s (ID: %s)\n", admins[i].a_name, admins[i].a_id);
                 printf("Is it you? (y/n): ");
                 char answer[4];
                 inputString(answer, sizeof(answer));
@@ -67,9 +69,9 @@ void addADMIN()
                     {
                         printf("Enter your password: ");
                         inputString(password, sizeof(password));
-                        if (strcmp(ADMINs[i].password, password) == 0)
+                        if (strcmp(admins[i].password, password) == 0)
                         {
-                            printf("Welcome back, %s!\n", ADMINs[i].d_name);
+                            printf("Welcome back, %s!\n", admins[i].a_name);
                             // Redirect to main admin module if needed
                             mainFunction();
                             return;
@@ -104,14 +106,14 @@ void addADMIN()
     inputString(new_admin.password, sizeof(new_admin.password));
     new_admin.registration_time = time(NULL);
     new_admin.status = ADMIN_ACTIVE;
-    snprintf(new_admin.d_id, sizeof(new_admin.d_id), "ADMIN%03d", ADMIN_counter + 1);
-    ADMINs[ADMIN_counter] = new_admin;
-    ADMIN_counter++;
-    saveADMINsToFile();
-    printf("New ADMIN added successfully with ID: %s\n", new_admin.d_id);
+    snprintf(new_admin.a_id, sizeof(new_admin.a_id), "ADMIN%03d", admin_counter + 1);
+    admins[admin_counter] = new_admin;
+    admin_counter++;
+    saveAdminsToFile();
+    printf("New admin added successfully with ID: %s\n", new_admin.a_id);
 
     // Return to login menu
-    ADMINModule();
+    adminModule();
 }
 
 // ..
@@ -120,21 +122,21 @@ void addADMIN()
 // void searchADMIN()
 // {
 // }
-void searchADMINByCnic()
+void searchAdminByCnic()
 {
     char check_cnic[16];
     printf("Enter your CNIC: ");
     inputValidatedCNIC(check_cnic, sizeof(check_cnic));
-    for (int i = 0; i < ADMIN_counter; i++)
+    for (int i = 0; i < admin_counter; i++)
     {
-        if (ADMINs[i].status == ADMIN_ACTIVE && (strcmp(ADMINs[i].d_cnic, check_cnic)) == 0)
+        if (admins[i].status == ADMIN_ACTIVE && (strcmp(admins[i].a_cnic, check_cnic)) == 0)
         {
-            printf("ADMIN found:\n");
-            printf("ID: %s\n", ADMINs[i].d_id);
+            printf("Admin found:\n");
+            printf("ID: %s\n", admins[i].a_id);
             printf("Enter your password: ");
             char password[20];
             inputString(password, sizeof(password));
-            if (strcmp(ADMINs[i].password, password) == 0)
+            if (strcmp(admins[i].password, password) == 0)
             {
                 printf("Login successful!\n\n");
                 // Proceed to ADMIN main module
@@ -149,44 +151,44 @@ void searchADMINByCnic()
         }
     }
     // Only print if no admin was found
-    printf("No ADMIN found with the provided CNIC.\n");
-    ADMINModule();
+    printf("No admin found with the provided CNIC.\n");
+    adminModule();
 }
 
 // File Operations
-void saveADMINsToFile()
+void saveAdminsToFile()
 {
     FILE *file = fopen("./data/Admin.dat", "wb");
     if (file == NULL)
     {
-        printf("Failed to open file for saving ADMINs");
+        printf("Failed to open file for saving admins");
         return;
     }
-    for (int i = 0; i < ADMIN_counter; i++)
+    for (int i = 0; i < admin_counter; i++)
     {
-        if (fwrite(&ADMINs[i], sizeof(ADMIN), 1, file) != 1)
+        if (fwrite(&admins[i], sizeof(Admin), 1, file) != 1)
         {
-            printf("Error writing ADMIN %d to file.\n", i + 1);
+            printf("Error writing admin %d to file.\n", i + 1);
         }
     }
     fclose(file);
 
-    printf("ADMINs saved to file successfully.\n");
+    printf("Admins saved to file successfully.\n");
 }
-void loadADMINsFromFile()
+void loadAdminsFromFile()
 {
     FILE *file = fopen("./data/Admin.dat", "rb");
     if (!file)
     {
-        printf("No existing ADMIN data file found. Starting with empty database.\n");
-        ADMIN_counter = 0;
+        printf("No existing admin data file found. Starting with empty database.\n");
+        admin_counter = 0;
         return;
     }
 
-    ADMIN_counter = 0; // Reset counter before loading
-    while (fread(&ADMINs[ADMIN_counter], sizeof(ADMIN), 1, file) != 0 && ADMIN_counter < MAX_ADMINS)
+    admin_counter = 0; // Reset counter before loading
+    while (fread(&admins[admin_counter], sizeof(Admin), 1, file) != 0 && admin_counter < MAX_ADMINS)
     {
-        ADMIN_counter++;
+        admin_counter++;
     }
     fclose(file);
 }

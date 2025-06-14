@@ -12,37 +12,34 @@ typedef enum
     ADMIN_ACTIVE,
     ADMIN_DEACTIVE,
     ADMIN_BLOCK
-} ADMINStatus;
+} AdminStatus;
 
 typedef struct
 {
-    
-    char d_id[20];
-
-    char d_name[50];
-    char d_cnic[15];
+    char a_id[20];
+    char a_name[50];
+    char a_cnic[15];
     char password[MAX_PASSWORD_LENGTH];
     time_t registration_time;
-    ADMINStatus status;
+    AdminStatus status;
     int failed_login_attempts;
-} ADMIN;
+} Admin;
 
-extern ADMIN ADMINs[MAX_ADMINS];
-extern int ADMIN_counter;
+extern Admin admins[MAX_ADMINS];
+extern int admin_counter;
 
 // Core Functions
-void ADMINModule();
+void adminModule();
 
-// Add ADMIN
-void addADMIN();
+// Add Admin
+void addAdmin();
 
 // Search Functions
-void searchADMIN();
-void searchADMINByCnic();
-
+void searchAdmin();
+void searchAdminByCnic();
 
 // File Operations
-void saveADMINsToFile();
-void loadADMINsFromFile();
+void saveAdminsToFile();
+void loadAdminsFromFile();
 
 #endif
