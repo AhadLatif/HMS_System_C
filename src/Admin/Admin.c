@@ -16,6 +16,7 @@ void ADMINModule()
     printf("Select an option:\n");
     printf("1. Register\n");
     printf("2. Login\n");
+    printf("3. Exit\n");
     option = inputInt("Enter your choice:");
 
     if (option == 1)
@@ -26,6 +27,11 @@ void ADMINModule()
     {
         searchADMINByCnic();
     }
+    else if(option ==3 )
+    {
+        exitProgram();
+    }
+    
     else
     {
         printf("Invalid choice. Please try again.\n");
@@ -144,6 +150,7 @@ void searchADMINByCnic()
     }
     // Only print if no admin was found
     printf("No ADMIN found with the provided CNIC.\n");
+    ADMINModule();
 }
 
 // File Operations

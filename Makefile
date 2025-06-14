@@ -15,15 +15,7 @@ TARGET = hms.exe
 
 all: directories $(TARGET)
 
-directories:
-	@IF NOT EXIST patient mkdir patient
-	@IF NOT EXIST doctor mkdir doctor
-	@IF NOT EXIST billing mkdir billing
-	@IF NOT EXIST data mkdir data
-	@IF NOT EXIST data\patients.dat type nul > data\patients.dat
-	@IF NOT EXIST data\doctors.dat type nul > data\doctors.dat
-	@IF NOT EXIST data\bills.dat type nul > data\bills.dat
-	@IF NOT EXIST data\meta.dat type nul > data\meta.dat
+
 
 $(TARGET): $(OBJ)
 	@$(CC) $(CFLAGS) -o $@ $^

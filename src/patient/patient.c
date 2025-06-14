@@ -431,6 +431,7 @@ void searchPatientById()
     else
     {
         visitLogMenu(i);
+        return;
     }
 }
 
@@ -505,6 +506,7 @@ void searchPatientByName()
         }
 
         visitLogMenu(select_index); // Provide access to visit log for the selected patient
+        return;
     }
 }
 
@@ -580,6 +582,7 @@ void searchPatientByCnic()
         }
 
         visitLogMenu(select_index); // Provide access to visit log for the selected patient
+        return;
     }
 }
 

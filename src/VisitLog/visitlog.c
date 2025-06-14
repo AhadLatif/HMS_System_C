@@ -67,6 +67,7 @@ void addVisitLog(char *patient_id)
     new_log.visit_time = time(NULL); // Current time
 
     saveVisitLog(new_log);
+    return;
 }
 
 void loadVisitLogs()
@@ -161,6 +162,7 @@ void visitLogMenu(int patient_index)
             break;
         case 3:
             printf("Returning to search menu.\n");
+            break;
             return;
         default:
             printf("Invalid choice! Please enter a valid option.\n");
