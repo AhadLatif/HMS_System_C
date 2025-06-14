@@ -86,7 +86,7 @@ void patientModule()
             deletePatient();
             break;
         case 6:
-            exitProgram();
+            mainFunction();
             break;
         default:
             printf("Invalid choice! Please enter a number between 1 and 5.\n");
@@ -1038,7 +1038,7 @@ void displayPatient()
 // ----------------------------------------Display Menu Function
 void displayPatientMenu(void)
 {
-    printf("\n=== Hospital Management System ===\n");
+    printf("\n=== Patient Module ===\n");
     printf("1. Add a Patient\n");
     printf("2. Display All Patients\n");
     printf("3. Search for a Patient\n");

@@ -130,7 +130,7 @@ void searchADMINByCnic()
             inputString(password, sizeof(password));
             if (strcmp(ADMINs[i].password, password) == 0)
             {
-                printf("Login successful!\n");
+                printf("Login successful!\n\n");
                 // Proceed to ADMIN main module
                 mainFunction();
                 return;

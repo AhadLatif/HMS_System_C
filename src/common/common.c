@@ -18,12 +18,13 @@ void mainFunction()
     do
     {
 
-        printf("Select an option:\n");
+        printf("\n\nWhich Module Do YOU Want To Access:\n\n");
+        printf("Select a module:\n");
+        printf("========================================\n");
         printf("1. Doctor Module\n");
         printf("2. Patient Module\n");
         printf("3. Exit Program \n");
-        printf("Enter your choice: ");
-        selection = inputInt("Choose ");
+        selection = inputInt("Enter your choice:");
 
     } while (selection != 1 && selection != 2 && selection != 3);
 
@@ -55,10 +56,7 @@ void welcomScreen(void)
     //  system("cls");//Use to clear screen
 }
 
-void login()
-{
-    printf("LOGIN\n");
-}
+
 
 void inputString(char *target, int size)
 {
