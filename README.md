@@ -11,3 +11,5 @@ HMS Project C is a comprehensive healthcare management solution that efficiently
 - Function names should use "camelCase."
 - Variable names should use underscores.
 - Struct names should be in Capital Letters.
+
+Demo Video: https://github.com/user-attachments/assets/06b8e867-6c51-4859-b913-abf63dcb8262
