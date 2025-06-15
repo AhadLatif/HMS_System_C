@@ -19,4 +19,6 @@ HMS Project C is a comprehensive healthcare management solution that efficiently
 3. Run the main.c file
 
 ## Demo Video
- https://github.com/user-attachments/assets/06b8e867-6c51-4859-b913-abf63dcb8262
+
+https://github.com/user-attachments/assets/bb8b3cd6-b390-415b-bacf-3dcbcad83743
+
