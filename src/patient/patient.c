@@ -16,16 +16,14 @@ int patient_counter = 0;
 // this is main patient module
 void patientModule()
 {
-
     loadPatientFromFile(); // Loading patient data and IDs from file when program starts
-
     loadIDManager();
 
     int choice;
     do
     {
         displayPatientMenu();
-        choice = inputInt("Enter your choice: ");
+        choice = inputInt("\nEnter your choice: ");
 
         switch (choice)
         {
@@ -38,13 +36,22 @@ void patientModule()
         case 3:
         {
             int search_choice;
-            printf("Search Patient by:\n1. ID\n2. Name\n3. CNIC\n4.<<<<<Go Back\n");
+            printf("\nSearch Patient by:\n");
+            printf("-----------------\n");
+            printf("1. ID\n");
+            printf("2. Name\n");
+            printf("3. CNIC\n");
+            printf("4. <<<<<Go Back\n");
+            printf("-----------------\n\n");
             search_choice = inputInt("Enter choice: ");
             while (search_choice != 1 && search_choice != 2 && search_choice != 3 && search_choice != 4)
             {
-                printf("Please choose correct option!");
-                printf("1. ID\n2. Name\n3. CNIC\n4.<<<<<Go Back\n");
-                search_choice = inputInt("Enter choice: ");
+                printf("\nPlease choose correct option!\n");
+                printf("1. ID\n");
+                printf("2. Name\n");
+                printf("3. CNIC\n");
+                printf("4. <<<<<Go Back\n");
+                search_choice = inputInt("\nEnter choice: ");
             }
             if (search_choice == 1)
                 searchPatientById();
@@ -55,20 +62,28 @@ void patientModule()
             else if (search_choice == 4)
                 continue;
             else
-                printf("Invalid search choice!\n");
+                printf("\nInvalid search choice!\n");
         }
         break;
         case 4:
         {
             int choice;
-
-            printf("\nUpdate Patient by:\n1. ID\n2. Name\n3. CNIC\n4.<<<<<Go Back\n");
+            printf("\nUpdate Patient by:\n");
+            printf("-----------------\n");
+            printf("1. ID\n");
+            printf("2. Name\n");
+            printf("3. CNIC\n");
+            printf("4. <<<<<Go Back\n");
+            printf("-----------------\n\n");
             choice = inputInt("Enter choice: ");
             while (choice != 1 && choice != 2 && choice != 3 && choice != 4)
             {
-                printf("Please choose correct option!");
-                printf("1. ID\n2. Name\n3. CNIC\n4.<<<<<Go Back\n");
-                choice = inputInt("Enter choice: ");
+                printf("\nPlease choose correct option!\n");
+                printf("1. ID\n");
+                printf("2. Name\n");
+                printf("3. CNIC\n");
+                printf("4. <<<<<Go Back\n");
+                choice = inputInt("\nEnter choice: ");
             }
             if (choice == 1)
                 updatePatientById();
@@ -79,7 +94,7 @@ void patientModule()
             else if (choice == 4)
                 continue;
             else
-                printf("Invalid search choice!\n");
+                printf("\nInvalid search choice!\n");
             break;
         }
         case 5:
@@ -89,11 +104,8 @@ void patientModule()
             mainFunction();
             break;
         default:
-            printf("Invalid choice! Please enter a number between 1 and 5.\n");
+            printf("\nInvalid choice! Please enter a number between 1 and 5.\n");
         }
-
-        // printf("\nPress Enter to continue...");
-        // while (getchar() != '\n';
     } while (choice != 6);
 }
 
@@ -386,66 +398,64 @@ void addPatient()
 
 //  ---------------------------------------Search Functions
 void searchPatientById()
-
 {
-
-    int confirm = inputInt("1. Search By ID\n2. <<<<<Go back\nEnter your choice: ");
+    int confirm = inputInt("\n1. Search By ID\n2. <<<<<Go back\n\nEnter your choice: ");
     if (confirm != 1)
     {
-        printf("Returning to main menu.\n");
+        printf("\nReturning to main menu.\n");
         return;
     }
 
     int found = 0;
     int i;
     char id[20];
-    printf("Enter Id of patient : ");
+    printf("\nEnter ID of patient: ");
     inputString(id, sizeof(id));
 
-    printf("-------------------------------------------------------------------------------------------------------\n");
-    printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Blood Group", "Gender", "Disease", "Contact", "Registration D&T");
-    printf("-------------------------------------------------------------------------------------------------------\n");
+    printf("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
     for (i = 0; i < patient_counter; i++)
     {
         if (strcmp(patients[i].patient_id, id) == 0 && patients[i].status == PATIENT_ACTIVE)
         {
-
             char reg_time_str[25];
             time_t currentTime = time(NULL);
             formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
 
-            printf("| %-5s | %-20s | %-3d | %-6s | %-15s | %-15s | %-19s | %-15s |\n",
-                   patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_blood_group,
-                   patients[i].p_gender, patients[i].p_disease, patients[i].p_contact_num, reg_time_str);
+            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
+                   patients[i].p_blood_group, patients[i].p_disease, patients[i].p_contact_num,
+                   patients[i].p_cnic, patients[i].is_minor ? "Yes" : "No", reg_time_str);
 
             found = 1;
-            printf("-------------------------------------------------------------------------------------------------------\n");
-
+            printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
             break;
         }
     }
     if (!found)
     {
-        printf("Patient with ID %s not found.\n", id);
+        printf("\nPatient with ID %s not found.\n", id);
     }
     else
     {
         visitLogMenu(i);
-        return;
     }
 }
 
 void searchPatientByName()
 {
-    int confirm = inputInt("1. Search By Name\n2. Go back\nEnter your choice: ");
+    int confirm = inputInt("\n1. Search By Name\n2. Go back\n\nEnter your choice: ");
     if (confirm != 1)
     {
-        printf("Returning to main menu.\n");
+        printf("\nReturning to main menu.\n");
         return;
     }
 
     char name[50];
-    printf("Enter Name: ");
+    printf("\nEnter Name: ");
     inputString(name, sizeof(name));
 
     int matches[100];
@@ -469,58 +479,55 @@ void searchPatientByName()
 
     int select_index = -1;
 
-    while (1)
+    // if find only one match
+    if (matchCount == 1)
     {
-        // if find only one match
-        if (matchCount == 1)
-        {
-            select_index = matches[0];
-
-            visitLogMenu(select_index);
-        }
-        else
-        {
-            // if found multiple matches ask user to select one
-            printf("\nMultiple patients found with matching name:\n");
-            printf("---------------------------------------------------------------------------------------------\n");
-            printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n",
-                   "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact");
-
-            for (int i = 0; i < matchCount; i++)
-            {
-                int idx = matches[i];
-                printf(" %-5d | %-5s |%-20s | %-3d | %-10s | %-15s | %-15s | %-15s |\n",
-                       i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
-                       patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease, patients[idx].p_contact_num);
-            }
-            printf("---------------------------------------------------------------------------------------------\n");
-
-            int choice;
-            do
-            {
-                printf("Select the number of the patient you want to (1-%d): \n", matchCount);
-                choice = inputInt("");
-            } while (choice < 1 || choice > matchCount);
-
-            select_index = matches[choice - 1];
-        }
-
-        visitLogMenu(select_index); // Provide access to visit log for the selected patient
-        return;
+        select_index = matches[0];
     }
+    else
+    {
+        // if found multiple matches ask user to select one
+        printf("\nMultiple patients found with matching name:\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+
+        for (int i = 0; i < matchCount; i++)
+        {
+            int idx = matches[i];
+            char reg_time_str[25];
+            formatRegistrationTime(patients[idx].registration_time, reg_time_str, sizeof(reg_time_str));
+            printf(" %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
+                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease,
+                   patients[idx].p_contact_num, patients[idx].p_cnic, patients[idx].is_minor ? "Yes" : "No", reg_time_str);
+        }
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+
+        int choice;
+        do
+        {
+            printf("\nSelect the number of the patient you want to (1-%d): ", matchCount);
+            choice = inputInt("");
+        } while (choice < 1 || choice > matchCount);
+
+        select_index = matches[choice - 1];
+    }
+
+    visitLogMenu(select_index); // Provide access to visit log for the selected patient
 }
 
 void searchPatientByCnic()
 {
-    int confirm = inputInt("1. Search By CNIC\n2. Go back\nEnter your choice: ");
+    int confirm = inputInt("\n1. Search By CNIC\n2. Go back\n\nEnter your choice: ");
     while (confirm != 1 && confirm != 2)
     {
-        printf("Wrong Choice\n");
-        confirm = inputInt("1. Search By CNIC\n2. Go back\nEnter your choice: ");
+        printf("\nWrong Choice\n");
+        confirm = inputInt("1. Search By CNIC\n2. Go back\n\nEnter your choice: ");
     }
 
     char cnic[20];
-    printf("Enter CNIC: ");
+    printf("\nEnter CNIC: ");
     inputString(cnic, sizeof(cnic));
 
     int matches[100];
@@ -544,46 +551,50 @@ void searchPatientByCnic()
     }
 
     int select_index = -1;
-    while (1)
-    {
-        // If only one match found, display it directly
-        if (matchCount == 1)
-        {
-            select_index = matches[0];
-            printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n",
-                   "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact");
-            printf(" %-5d | %-5s |%-20s | %-3d | %-10s | %-15s | %-15s | %-15s |\n",
-                   1, patients[select_index].patient_id, patients[select_index].p_name, patients[select_index].p_age,
-                   patients[select_index].p_gender, patients[select_index].p_blood_group, patients[select_index].p_disease, patients[select_index].p_contact_num);
-            printf("---------------------------------------------------------------------------------------------\n");
-        }
-        else if (matchCount > 1)
-        {
-            // If multiple matches found, display them and ask user to select one
-            printf("\nMultiple patients found with matching CNIC or Guardian CNIC:\n");
-            printf("---------------------------------------------------------------------------------------------\n");
-            printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n",
-                   "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact");
-            for (int i = 0; i < matchCount; i++)
-            {
-                int idx = matches[i];
-                printf(" %-5d | %-5s |%-20s | %-3d | %-10s | %-15s | %-15s | %-15s |\n",
-                       i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
-                       patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease, patients[idx].p_contact_num);
-            }
-            printf("---------------------------------------------------------------------------------------------\n");
-            int choice;
-            do
-            {
-                printf("Select the number of the patient you want to (1-%d): \n", matchCount);
-                choice = inputInt("");
-            } while (choice < 1 || choice > matchCount);
-            select_index = matches[choice - 1];
-        }
 
-        visitLogMenu(select_index); // Provide access to visit log for the selected patient
-        return;
+    // If only one match found, display it directly
+    if (matchCount == 1)
+    {
+        select_index = matches[0];
+        printf("\n------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+        char reg_time_str[25];
+        formatRegistrationTime(patients[select_index].registration_time, reg_time_str, sizeof(reg_time_str));
+        printf(" %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               1, patients[select_index].patient_id, patients[select_index].p_name, patients[select_index].p_age,
+               patients[select_index].p_gender, patients[select_index].p_blood_group, patients[select_index].p_disease,
+               patients[select_index].p_contact_num, patients[select_index].p_cnic, patients[select_index].is_minor ? "Yes" : "No", reg_time_str);
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     }
+    else if (matchCount > 1)
+    {
+        // If multiple matches found, display them and ask user to select one
+        printf("\nMultiple patients found with matching CNIC or Guardian CNIC:\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+        for (int i = 0; i < matchCount; i++)
+        {
+            int idx = matches[i];
+            char reg_time_str[25];
+            formatRegistrationTime(patients[idx].registration_time, reg_time_str, sizeof(reg_time_str));
+            printf(" %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
+                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease,
+                   patients[idx].p_contact_num, patients[idx].p_cnic, patients[idx].is_minor ? "Yes" : "No", reg_time_str);
+        }
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        int choice;
+        do
+        {
+            printf("\nSelect the number of the patient you want to (1-%d): ", matchCount);
+            choice = inputInt("");
+        } while (choice < 1 || choice > matchCount);
+        select_index = matches[choice - 1];
+    }
+
+    visitLogMenu(select_index); // Provide access to visit log for the selected patient
 }
 
 //-----------------------------------Delete Patient--------------------
@@ -716,18 +727,21 @@ void updatePatientByName()
     else
     {
         printf("\n Multiple patients found with matching name:\n\n");
-        printf("---------------------------------------------------------------------------------------------\n");
-        printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n",
-               "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
 
         for (int i = 0; i < matchCount; i++)
         {
             int idx = matches[i];
-            printf(" %-5d | %-5s |%-20s | %-3d | %-10s | %-15s | %-15s | %-15s |\n",
+            char reg_time_str[25];
+            formatRegistrationTime(patients[idx].registration_time, reg_time_str, sizeof(reg_time_str));
+            printf(" %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
                    i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
-                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease, patients[idx].p_contact_num);
+                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease,
+                   patients[idx].p_contact_num, patients[idx].p_cnic, patients[idx].is_minor ? "Yes" : "No", reg_time_str);
         }
-        printf("---------------------------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
         printf("\nSelect the number of the patient you want to update (1-%d): ", matchCount);
         int choice = inputInt("");
@@ -777,16 +791,19 @@ void updatePatientByCnic()
     else
     {
         printf("\n Multiple patients found with matching CNIC:\n\n");
-        printf("-----------------------------------------------------------------------------------------------------------------------------\n");
-        printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n\n", "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n\n", "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
         for (int i = 0; i < matchCount; i++)
         {
             int idx = matches[i];
-            printf(" %-5d | %-5s |%-20s | %-3d | %-10s | %-15s | %-15s | %-15s |\n",
+            char reg_time_str[25];
+            formatRegistrationTime(patients[idx].registration_time, reg_time_str, sizeof(reg_time_str));
+            printf(" %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
                    i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
-                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease, patients[idx].p_contact_num);
+                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease,
+                   patients[idx].p_contact_num, patients[idx].p_cnic, patients[idx].is_minor ? "Yes" : "No", reg_time_str);
         }
-        printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("\nSelect the number of the patient you want to update (1-%d): ", matchCount);
         int choice = inputInt("");
         while (choice < 1 || choice > matchCount)
@@ -841,16 +858,19 @@ void deletePatientByCnic()
     else
     {
         printf("\n Multiple patients found with matching CNIC:\n\n");
-        printf("-----------------------------------------------------------------------------------------------------------------------------\n");
-        printf(" %-5s | %-5s |%-20s | %-3s | %-10s | %-15s | %-15s | %-15s |\n\n", "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf(" %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n\n", "No.", "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
         for (int i = 0; i < matchCount; i++)
         {
             int idx = matches[i];
-            printf(" %-5d | %-5s |%-20s | %-3d | %-10s | %-15s | %-15s | %-15s |\n",
+            char reg_time_str[25];
+            formatRegistrationTime(patients[idx].registration_time, reg_time_str, sizeof(reg_time_str));
+            printf(" %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
                    i + 1, patients[idx].patient_id, patients[idx].p_name, patients[idx].p_age,
-                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease, patients[idx].p_contact_num);
+                   patients[idx].p_gender, patients[idx].p_blood_group, patients[idx].p_disease,
+                   patients[idx].p_contact_num, patients[idx].p_cnic, patients[idx].is_minor ? "Yes" : "No", reg_time_str);
         }
-        printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+        printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("\nSelect the number of the patient you want to delete (1-%d): ", matchCount);
         int choice = inputInt("");
         while (choice < 1 || choice > matchCount)
@@ -879,81 +899,75 @@ void displayActivePatient()
 {
     FILE *file = fopen("./data/patient.dat", "rb");
     fileCheck(file);
-    printf("\n List of All Patients:\n");
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-19s |\n", "PID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration D&T");
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n=== Active Patients ===\n");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].status == PATIENT_ACTIVE)
         {
-            time_t currentTime = time(NULL);
             char reg_time_str[25];
-            formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
-            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-19s |\n",
+            formatRegistrationTime(patients[i].registration_time, reg_time_str, sizeof(reg_time_str));
+
+            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
                    patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
                    patients[i].p_blood_group, patients[i].p_disease, patients[i].p_contact_num,
-                   patients[i].is_minor ? (strlen(patients[i].guardian_cnic) ? patients[i].guardian_cnic : "-") : patients[i].p_cnic,
-                   patients[i].is_minor ? "Minor" : "Adult", reg_time_str);
+                   patients[i].p_cnic, patients[i].is_minor ? "Yes" : "No", reg_time_str);
         }
     }
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (patient_counter == 0)
-        printf("No patient records found.\n");
+        printf("No active patient records found.\n");
 }
 
 void displayDeactivePatient()
 {
     FILE *file = fopen("./data/patient.dat", "rb");
     fileCheck(file);
-    printf("\n List of Deactive Patients:\n");
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-19s |\n", "PID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration D&T");
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n=== Deactive Patients ===\n");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < patient_counter; i++)
     {
         if (patients[i].status == PATIENT_DEACTIVE)
         {
             char reg_time_str[25];
-            time_t currentTime = time(NULL);
-            formatRegistrationTime(currentTime, reg_time_str, sizeof(reg_time_str));
-            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-19s |\n",
+            formatRegistrationTime(patients[i].registration_time, reg_time_str, sizeof(reg_time_str));
+
+            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
                    patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
                    patients[i].p_blood_group, patients[i].p_disease, patients[i].p_contact_num,
-                   patients[i].is_minor ? (strlen(patients[i].guardian_cnic) ? patients[i].guardian_cnic : "-") : patients[i].p_cnic,
-                   patients[i].is_minor ? "Minor" : "Adult", reg_time_str);
+                   patients[i].p_cnic, patients[i].is_minor ? "Yes" : "No", reg_time_str);
         }
     }
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (patient_counter == 0)
-        printf("No patient records found.\n");
+        printf("No deactive patient records found.\n");
 }
 void displayAllPatient()
 {
     FILE *file = fopen("./data/patient.dat", "rb");
     fileCheck(file);
-    printf("\n List of All Patients:\n");
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-19s |\n", "PID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration D&T");
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n=== All Patients ===\n");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Blood Group", "Disease", "Contact", "CNIC", "Minor", "Registration Time");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     for (int i = 0; i < patient_counter; i++)
     {
         char reg_time_str[25];
-        time_t current_time = time(NULL);
-        formatRegistrationTime(current_time, reg_time_str, sizeof(reg_time_str));
-        printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-19s |\n",
-               patients[i].patient_id,
-               patients[i].p_name,
-               patients[i].p_age,
-               patients[i].p_gender,
-               patients[i].p_blood_group,
-               patients[i].p_disease,
-               patients[i].p_contact_num,
-               patients[i].is_minor ? (strlen(patients[i].guardian_cnic) ? patients[i].guardian_cnic : "-") : patients[i].p_cnic,
-               patients[i].is_minor ? "Minor" : "Adult",
-               reg_time_str);
+        formatRegistrationTime(patients[i].registration_time, reg_time_str, sizeof(reg_time_str));
+
+        printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               patients[i].patient_id, patients[i].p_name, patients[i].p_age, patients[i].p_gender,
+               patients[i].p_blood_group, patients[i].p_disease, patients[i].p_contact_num,
+               patients[i].p_cnic, patients[i].is_minor ? "Yes" : "No", reg_time_str);
     }
-    printf("-----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (patient_counter == 0)
         printf("No patient records found.\n");
 }
@@ -1042,13 +1056,14 @@ void displayPatient()
 void displayPatientMenu(void)
 {
     printf("\n=== Patient Module ===\n");
+    printf("=====================\n");
     printf("1. Add a Patient\n");
     printf("2. Display All Patients\n");
     printf("3. Search for a Patient\n");
     printf("4. Update a Patient\n");
     printf("5. Delete a Patient\n");
     printf("6. Exit\n");
-    printf("==============================\n");
+    printf("=====================\n");
 }
 
 //---------------------------------------------Load Patient

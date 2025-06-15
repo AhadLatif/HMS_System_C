@@ -352,74 +352,106 @@ void searchDoctor()
 void searchDoctorById()
 {
     char id[10];
-    printf("Enter Doctor ID: ");
+    printf("\nEnter Doctor ID: ");
     inputString(id, sizeof(id));
 
-    printf("--------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-15s | %-15s | %-20s | %-20s |\n",
-           "ID", "Name", "CNIC", "Phone", "Specialization", "Registration Time");
-    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("\n\n=== Search Results ===\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Status", "Minor", "Registration Time");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     int found = 0;
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (strcmp(doctors[i].d_id, id) == 0 && doctors[i].status == DOCTOR_ACTIVE)
+        if (strcmp(doctors[i].d_id, id) == 0)
         {
             char reg_time_str[25];
             formatRegistrationTime(doctors[i].registration_time, reg_time_str, sizeof(reg_time_str));
 
-            printf("| %-8s | %-20s | %-15s | %-15s | %-20s | %-20s |\n",
-                   doctors[i].d_id,
-                   doctors[i].d_name,
-                   doctors[i].d_cnic,
-                   doctors[i].d_phone,
-                   doctors[i].d_specialization,
-                   reg_time_str);
+            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   doctors[i].d_id, doctors[i].d_name, doctors[i].d_age,
+                   doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_phone,
+                   doctors[i].d_cnic, doctors[i].status == DOCTOR_ACTIVE ? "Active" : "Deactive",
+                   "No", reg_time_str);
             found = 1;
             break;
         }
     }
-    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (!found)
     {
-        printf("Doctor with ID %s not found.\n", id);
+        printf("\nNo doctor found with ID: %s\n", id);
     }
+    printf("\n");
 }
 
 void searchDoctorByName()
 {
     char name[50];
-    printf("Enter Doctor Name: ");
+    printf("\nEnter Doctor Name: ");
     inputString(name, sizeof(name));
 
-    printf("--------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-15s | %-15s | %-20s | %-20s |\n",
-           "ID", "Name", "CNIC", "Phone", "Specialization", "Registration Time");
-    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("\n\n=== Search Results ===\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "No.", "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Status", "Minor", "Registration Time");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     int found = 0;
+    int count = 0;
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (doctors[i].status == DOCTOR_ACTIVE && strncasecmp(doctors[i].d_name, name, strlen(name)) == 0)
+        if (strstr(doctors[i].d_name, name) != NULL)
         {
             char reg_time_str[25];
             formatRegistrationTime(doctors[i].registration_time, reg_time_str, sizeof(reg_time_str));
 
-            printf("| %-8s | %-20s | %-15s | %-15s | %-20s | %-20s |\n",
-                   doctors[i].d_id,
-                   doctors[i].d_name,
-                   doctors[i].d_cnic,
-                   doctors[i].d_phone,
-                   doctors[i].d_specialization,
-                   reg_time_str);
+            printf("| %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   ++count, doctors[i].d_id, doctors[i].d_name, doctors[i].d_age,
+                   doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_phone,
+                   doctors[i].d_cnic, doctors[i].status == DOCTOR_ACTIVE ? "Active" : "Deactive",
+                   "No", reg_time_str);
             found = 1;
         }
     }
-    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (!found)
     {
-        printf("No doctors found matching '%s'.\n", name);
+        printf("\nNo doctor found with name: %s\n", name);
     }
+    else if (count > 1)
+    {
+        int choice;
+        printf("\nEnter the number of the doctor to view schedule (0 to cancel): ");
+        scanf("%d", &choice);
+        getchar(); // Clear input buffer
+
+        if (choice > 0 && choice <= count)
+        {
+            int current = 0;
+            for (int i = 0; i < doctor_counter; i++)
+            {
+                if (strstr(doctors[i].d_name, name) != NULL)
+                {
+                    current++;
+                    if (current == choice)
+                    {
+                        printf("\nDoctor found:\n");
+                        printf("ID: %s\n", doctors[i].d_id);
+                        printf("Name: %s\n", doctors[i].d_name);
+                        printf("Age: %d\n", doctors[i].d_age);
+                        printf("Gender: %s\n", doctors[i].d_gender);
+                        printf("Phone: %s\n", doctors[i].d_phone);
+                        printf("Specialization: %s\n", doctors[i].d_specialization);
+                        printf("Status: %s\n", doctors[i].status == DOCTOR_ACTIVE ? "Active" : "Inactive");
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    printf("\n");
 }
 
 void searchDoctorBySpecialization()
@@ -429,10 +461,10 @@ void searchDoctorBySpecialization()
     printf("Enter Specialization : ");
     inputString(specialization, sizeof(specialization));
 
-    printf("-----------------------------------------------------------------------------------------------\n");
+   printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n",
            "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Registration D&T");
-    printf("-----------------------------------------------------------------------------------------------\n");
+   printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     for (int i = 0; i < doctor_counter; i++)
     {
@@ -447,7 +479,7 @@ void searchDoctorBySpecialization()
             found = 1;
         }
     }
-    printf("-----------------------------------------------------------------------------------------------\n");
+   printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     if (!found)
     {
@@ -457,38 +489,70 @@ void searchDoctorBySpecialization()
 
 void searchDoctorByCnic()
 {
-    char cnic[15];
-    printf("Enter Doctor CNIC: ");
+    char cnic[20];
+    printf("\nEnter Doctor CNIC: ");
     inputString(cnic, sizeof(cnic));
 
-    printf("--------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-15s | %-15s | %-20s | %-20s |\n",
-           "ID", "Name", "CNIC", "Phone", "Specialization", "Registration Time");
-    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("\n\n=== Search Results ===\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-5s | %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "No.", "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Status", "Minor", "Registration Time");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     int found = 0;
+    int count = 0;
     for (int i = 0; i < doctor_counter; i++)
     {
-        if (doctors[i].status == DOCTOR_ACTIVE && strncmp(doctors[i].d_cnic, cnic, strlen(cnic)) == 0)
+        if (strstr(doctors[i].d_cnic, cnic) != NULL)
         {
             char reg_time_str[25];
             formatRegistrationTime(doctors[i].registration_time, reg_time_str, sizeof(reg_time_str));
 
-            printf("| %-8s | %-20s | %-15s | %-15s | %-20s | %-20s |\n",
-                   doctors[i].d_id,
-                   doctors[i].d_name,
-                   doctors[i].d_cnic,
-                   doctors[i].d_phone,
-                   doctors[i].d_specialization,
-                   reg_time_str);
+            printf("| %-5d | %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   ++count, doctors[i].d_id, doctors[i].d_name, doctors[i].d_age,
+                   doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_phone,
+                   doctors[i].d_cnic, doctors[i].status == DOCTOR_ACTIVE ? "Active" : "Deactive",
+                   "No", reg_time_str);
             found = 1;
         }
     }
-    printf("--------------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (!found)
     {
-        printf("No doctors found with CNIC '%s'.\n", cnic);
+        printf("\nNo doctor found with CNIC: %s\n", cnic);
     }
+    else if (count > 1)
+    {
+        int choice;
+        printf("\nEnter the number of the doctor to view schedule (0 to cancel): ");
+        scanf("%d", &choice);
+        getchar(); // Clear input buffer
+
+        if (choice > 0 && choice <= count)
+        {
+            int current = 0;
+            for (int i = 0; i < doctor_counter; i++)
+            {
+                if (strstr(doctors[i].d_cnic, cnic) != NULL)
+                {
+                    current++;
+                    if (current == choice)
+                    {
+                        printf("\nDoctor found:\n");
+                        printf("ID: %s\n", doctors[i].d_id);
+                        printf("Name: %s\n", doctors[i].d_name);
+                        printf("Age: %d\n", doctors[i].d_age);
+                        printf("Gender: %s\n", doctors[i].d_gender);
+                        printf("Phone: %s\n", doctors[i].d_phone);
+                        printf("Specialization: %s\n", doctors[i].d_specialization);
+                        printf("Status: %s\n", doctors[i].status == DOCTOR_ACTIVE ? "Active" : "Inactive");
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    printf("\n");
 }
 
 void deleteDoctor()
@@ -606,7 +670,7 @@ void deleteDoctorByCnic()
     else
     {
         printf("\nMultiple doctors found with matching CNIC:\n\n");
-        printf("-----------------------------------------------------------------------------------------------\n");
+       printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC");
 
         for (int i = 0; i < matchCount; i++)
@@ -616,7 +680,7 @@ void deleteDoctorByCnic()
                    doctors[idx].d_id, doctors[idx].d_name, doctors[idx].d_age,
                    doctors[idx].d_gender, doctors[idx].d_specialization, doctors[idx].d_phone, doctors[idx].d_cnic);
         }
-        printf("-----------------------------------------------------------------------------------------------\n");
+       printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
         printf("\nSelect the number of the doctor you want to delete (1-%d): ", matchCount);
         int choice = inputInt("");
@@ -752,12 +816,11 @@ void displayDoctors()
 
 void displayActiveDoctors()
 {
-    printf("\n=== Active Doctors ===\n");
-    printf("------------------------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-20s | %-20s |\n",
-           "ID", "Name", "Age", "Gender", "CNIC", "Phone", "Specialization", "Registration Time");
-    printf("------------------------------------------------------------------------------------------------------------------------\n");
-
+    printf("\n\n=== Active Doctors ===\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Status", "Minor", "Registration Time");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     int found = 0;
     for (int i = 0; i < doctor_counter; i++)
     {
@@ -766,32 +829,28 @@ void displayActiveDoctors()
             char reg_time_str[25];
             formatRegistrationTime(doctors[i].registration_time, reg_time_str, sizeof(reg_time_str));
 
-            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-20s | %-20s |\n",
-                   doctors[i].d_id,
-                   doctors[i].d_name,
-                   doctors[i].d_age,
-                   doctors[i].d_gender,
-                   doctors[i].d_cnic,
-                   doctors[i].d_phone,
-                   doctors[i].d_specialization,
-                   reg_time_str);
+            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   doctors[i].d_id, doctors[i].d_name, doctors[i].d_age,
+                   doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_phone,
+                   doctors[i].d_cnic, "Active", "No", reg_time_str);
             found = 1;
         }
     }
-    printf("------------------------------------------------------------------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (!found)
     {
-        printf("No active doctors found.\n");
+        printf("\nNo active doctors found.\n");
     }
+    printf("\n");
 }
 
 void displayDeactiveDoctors()
 {
-    printf("\n=== Deactive Doctors ===\n");
-    printf("------------------------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-20s | %-20s |\n",
-           "ID", "Name", "Age", "Gender", "CNIC", "Phone", "Specialization", "Registration Time");
-    printf("------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n\n=== Deactive Doctors ===\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Status", "Minor", "Registration Time");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     int found = 0;
     for (int i = 0; i < doctor_counter; i++)
@@ -801,56 +860,41 @@ void displayDeactiveDoctors()
             char reg_time_str[25];
             formatRegistrationTime(doctors[i].registration_time, reg_time_str, sizeof(reg_time_str));
 
-            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-20s | %-20s |\n",
-                   doctors[i].d_id,
-                   doctors[i].d_name,
-                   doctors[i].d_age,
-                   doctors[i].d_gender,
-                   doctors[i].d_cnic,
-                   doctors[i].d_phone,
-                   doctors[i].d_specialization,
-                   reg_time_str);
+            printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+                   doctors[i].d_id, doctors[i].d_name, doctors[i].d_age,
+                   doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_phone,
+                   doctors[i].d_cnic, "Deactive", "No", reg_time_str);
             found = 1;
         }
     }
-    printf("------------------------------------------------------------------------------------------------------------------------\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
     if (!found)
     {
-        printf("No deactive doctors found.\n");
+        printf("\nNo deactive doctors found.\n");
     }
+    printf("\n");
 }
 
 void displayAllDoctors()
 {
-    printf("\n=== All Doctors ===\n");
-    printf("----------------------------------------------------------------------------------------------------------------------------\n");
-    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-20s | %-20s | %-10s |\n",
-           "ID", "Name", "Age", "Gender", "CNIC", "Phone", "Specialization", "Registration Time", "Status");
-    printf("----------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n\n=== All Doctors ===\n");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("| %-8s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+           "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Status", "Minor", "Registration Time");
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     for (int i = 0; i < doctor_counter; i++)
     {
         char reg_time_str[25];
         formatRegistrationTime(doctors[i].registration_time, reg_time_str, sizeof(reg_time_str));
-        const char *status_str = doctors[i].status == DOCTOR_ACTIVE ? "Active" : doctors[i].status == DOCTOR_DEACTIVE ? "Deactive"
-                                                                                                                      : "Blocked";
 
-        printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-20s | %-20s | %-10s |\n",
-               doctors[i].d_id,
-               doctors[i].d_name,
-               doctors[i].d_age,
-               doctors[i].d_gender,
-               doctors[i].d_cnic,
-               doctors[i].d_phone,
-               doctors[i].d_specialization,
-               reg_time_str,
-               status_str);
+        printf("| %-8s | %-20s | %-3d | %-6s | %-15s | %-15s | %-15s | %-15s | %-6s | %-20s |\n",
+               doctors[i].d_id, doctors[i].d_name, doctors[i].d_age,
+               doctors[i].d_gender, doctors[i].d_specialization, doctors[i].d_phone,
+               doctors[i].d_cnic, doctors[i].status == DOCTOR_ACTIVE ? "Active" : "Deactive",
+               "No", reg_time_str);
     }
-    printf("----------------------------------------------------------------------------------------------------------------------------\n");
-    if (doctor_counter == 0)
-    {
-        printf("No doctor records found.\n");
-    }
+    printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 }
 
 void updateDoctorById()
@@ -921,7 +965,7 @@ void updateDoctorByName()
     else
     {
         printf("\nMultiple doctors found with matching name:\n\n");
-        printf("-----------------------------------------------------------------------------------------------\n");
+        printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Registration D&T");
 
         for (int i = 0; i < matchCount; i++)
@@ -934,7 +978,7 @@ void updateDoctorByName()
                    doctors[idx].d_id, doctors[idx].d_name, doctors[idx].d_age,
                    doctors[idx].d_gender, doctors[idx].d_specialization, doctors[idx].d_phone, doctors[idx].d_cnic, reg_time_str);
         }
-        printf("-----------------------------------------------------------------------------------------------\n");
+        printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
         printf("\nSelect the number of the doctor you want to update (1-%d): ", matchCount);
         int choice = inputInt("");
@@ -988,7 +1032,7 @@ void updateDoctorByCnic()
     else
     {
         printf("\nMultiple doctors found with matching CNIC:\n\n");
-        printf("-----------------------------------------------------------------------------------------------\n");
+        printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Registration D&T");
 
         for (int i = 0; i < matchCount; i++)
@@ -1001,7 +1045,7 @@ void updateDoctorByCnic()
                    doctors[idx].d_id, doctors[idx].d_name, doctors[idx].d_age,
                    doctors[idx].d_gender, doctors[idx].d_specialization, doctors[idx].d_phone, doctors[idx].d_cnic, reg_time_str);
         }
-        printf("-----------------------------------------------------------------------------------------------\n");
+        printf("----------------------------------------------------------------------------------------------------------------------------------------------------------\n");
 
         printf("\nSelect the number of the doctor you want to update (1-%d): ", matchCount);
         int choice = inputInt("");

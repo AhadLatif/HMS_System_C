@@ -116,23 +116,18 @@ void addAdmin()
     adminModule();
 }
 
-// ..
-// }.existing code...
-// // Search Functions
-// void searchADMIN()
-// {
-// }
+
 void searchAdminByCnic()
 {
     char check_cnic[16];
-    printf("Enter your CNIC: ");
+    
     inputValidatedCNIC(check_cnic, sizeof(check_cnic));
     for (int i = 0; i < admin_counter; i++)
     {
         if (admins[i].status == ADMIN_ACTIVE && (strcmp(admins[i].a_cnic, check_cnic)) == 0)
         {
             printf("Admin found:\n");
-            printf("ID: %s\n", admins[i].a_id);
+            printf("ID: %s\nName :%s\n\n", admins[i].a_id,admins[i].a_name);
             printf("Enter your password: ");
             char password[20];
             inputString(password, sizeof(password));
