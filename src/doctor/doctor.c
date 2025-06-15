@@ -33,10 +33,10 @@ void doctorModule()
             searchDoctor();
             break;
         case 4:
-            deleteDoctor();
-            break;
+        updateDoctorMenu();
+        break;
         case 5:
-            updateDoctorMenu();
+        deleteDoctor();
 
             break;
 
@@ -461,10 +461,10 @@ void searchDoctorBySpecialization()
     printf("Enter Specialization : ");
     inputString(specialization, sizeof(specialization));
 
-   printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
     printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s | %-15s |\n",
            "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC", "Registration D&T");
-   printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     for (int i = 0; i < doctor_counter; i++)
     {
@@ -479,7 +479,7 @@ void searchDoctorBySpecialization()
             found = 1;
         }
     }
-   printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+    printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
     if (!found)
     {
@@ -670,7 +670,7 @@ void deleteDoctorByCnic()
     else
     {
         printf("\nMultiple doctors found with matching CNIC:\n\n");
-       printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
         printf("| %-5s | %-20s | %-3s | %-6s | %-15s | %-15s | %-15s |\n", "ID", "Name", "Age", "Gender", "Specialization", "Contact", "CNIC");
 
         for (int i = 0; i < matchCount; i++)
@@ -680,7 +680,7 @@ void deleteDoctorByCnic()
                    doctors[idx].d_id, doctors[idx].d_name, doctors[idx].d_age,
                    doctors[idx].d_gender, doctors[idx].d_specialization, doctors[idx].d_phone, doctors[idx].d_cnic);
         }
-       printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
+        printf("-----------------------------------------------------------------------------------------------------------------------------------------------\n");
 
         printf("\nSelect the number of the doctor you want to delete (1-%d): ", matchCount);
         int choice = inputInt("");
@@ -777,8 +777,8 @@ void displayDoctorMenu()
     printf("1. Add a Doctor\n");
     printf("2. Display All Doctors\n");
     printf("3. Search for a Doctor\n");
-    printf("4. Delete a Doctor\n");
-    printf("5. Update a Doctor\n");
+    printf("4. Update a Doctor\n");
+    printf("5. Delete a Doctor\n");
     printf("6. Exit\n");
     printf("==============================\n");
 }
