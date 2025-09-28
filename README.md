@@ -4,7 +4,8 @@ HMS Project C is a comprehensive healthcare management solution that efficiently
 
 1. Patient records  
 2. Doctor records  
-3. Billing records integration  
+3. Logging system  
+4. Authentication
 
 ## Naming Conventions
 
